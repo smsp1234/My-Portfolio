@@ -26,109 +26,56 @@
             align-items: center;
         }
 
-        /* Sectiunea de Header cu Poza */
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-            max-width: 800px;
-        }
+        .header { text-align: center; margin-bottom: 50px; max-width: 800px; }
 
         .profile-pic-container {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 3px solid var(--accent);
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--card-bg);
-            overflow: hidden;
-            color: var(--accent);
-            font-size: 0.9em;
-            text-align: center;
-            padding: 10px;
+            width: 150px; height: 150px; border-radius: 50%;
+            border: 3px solid var(--accent); margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            background-color: var(--card-bg); overflow: hidden;
+            color: var(--accent); font-size: 0.9em; padding: 10px;
         }
 
-        .profile-pic-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .profile-pic-container img { width: 100%; height: 100%; object-fit: cover; }
 
         h1 { color: var(--text-bright); margin-bottom: 5px; }
         .subtitle { color: var(--accent); font-weight: 500; margin-top: 0; }
 
-        /* Containerul pentru categorii */
         .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            width: 100%;
-            max-width: 1100px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px; width: 100%; max-width: 1100px;
         }
 
         .category-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 25px;
-            transition: border-color 0.3s ease;
+            background-color: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 12px; padding: 25px; transition: border-color 0.3s ease;
         }
 
-        .category-card:hover {
-            border-color: var(--accent);
-        }
+        .category-card:hover { border-color: var(--accent); }
 
         .category-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 20px; border-bottom: 1px solid var(--border);
             padding-bottom: 10px;
         }
 
-        .folder-icon { font-size: 1.5em; }
         h2 { color: var(--text-bright); margin: 0; font-size: 1.3em; }
 
-        /* Butoane Proiecte */
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .btn-group { display: flex; flex-direction: column; gap: 12px; }
 
         .project-btn {
-            display: flex;
-            flex-direction: column;
-            padding: 15px;
-            background-color: var(--btn-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; padding: 15px;
+            background-color: var(--btn-bg); border: 1px solid var(--border);
+            border-radius: 8px; color: var(--accent); text-decoration: none;
+            font-weight: 600; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .project-btn:hover {
-            background-color: var(--border);
-            border-color: var(--accent);
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            background-color: var(--border); border-color: var(--accent);
+            transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
-        .project-btn span {
-            color: var(--text-main);
-            font-size: 0.85em;
-            font-weight: normal;
-            margin-top: 4px;
-        }
-
-        @media (max-width: 600px) {
-            .grid-container { grid-template-columns: 1fr; }
-        }
+        .project-btn span { color: var(--text-main); font-size: 0.85em; font-weight: normal; margin-top: 4px; }
     </style>
 </head>
 <body>
@@ -145,16 +92,16 @@
         <div class="category-card">
             <div class="category-header">
                 <span class="folder-icon">📁</span>
-                <h2>FullStack</h2>
+                <h2>FullStack & Engines</h2>
             </div>
             <div class="btn-group">
-                <a href="cale-catre-proiect1.html" class="project-btn">
-                    Sistem Bancar & Librărie
-                    <span>Ecosistem Java & Android / TCP-IP</span>
+                <a href="proiect-java.html" class="project-btn">
+                    Java + Android
+                    <span>Ecosistem Bancar & Librărie (TCP/IP)</span>
                 </a>
-                <a href="cale-catre-proiect2.html" class="project-btn">
-                    Integrated Software System
-                    <span>Proiect Sesiune Științifică 2026</span>
+                <a href="proiect-ue5.html" class="project-btn">
+                    Unreal Engine 5
+                    <span>Mecanici și Prototipare Medii 3D</span>
                 </a>
             </div>
         </div>
@@ -162,14 +109,14 @@
         <div class="category-card">
             <div class="category-header">
                 <span class="folder-icon">📁</span>
-                <h2>Legacy</h2>
+                <h2>Legacy & Core</h2>
             </div>
             <div class="btn-group">
-                <a href="cale-catre-proiect3.html" class="project-btn">
+                <a href="proiect-cpp.html" class="project-btn">
                     Fundamente C++
                     <span>Algoritmi și Structuri de Date (2023)</span>
                 </a>
-                <a href="cale-catre-proiect4.html" class="project-btn">
+                <a href="proiect-python.html" class="project-btn">
                     Automatizări Python
                     <span>Scripting și Utilitare (2024)</span>
                 </a>
@@ -182,13 +129,13 @@
                 <h2>LowCode</h2>
             </div>
             <div class="btn-group">
-                <a href="cale-catre-proiect5.html" class="project-btn">
-                    PowerApps Solutions
-                    <span>Aplicații Business & Fluxuri Automate</span>
+                <a href="proiect-appsheet.html" class="project-btn">
+                    AppSheet
+                    <span>Soluții Mobile Quick-Deploy</span>
                 </a>
-                <a href="cale-catre-proiect6.html" class="project-btn">
-                    UE5 Prototyping
-                    <span>Mecanici și Medii Unreal Engine 5</span>
+                <a href="proiect-powerapps.html" class="project-btn">
+                    PowerApps
+                    <span>Aplicații Business și Workflows Microsoft</span>
                 </a>
             </div>
         </div>
