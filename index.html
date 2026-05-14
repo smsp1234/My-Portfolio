@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Portofoliu Software Developer</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #0d1117; color: #c9d1d9; padding: 40px; line-height: 1.6; }
+        .header { border-bottom: 1px solid #30363d; margin-bottom: 40px; padding-bottom: 20px; }
+        .container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .folder { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px; position: relative; }
+        .folder:hover { border-color: #58a6ff; }
+        .folder-icon { font-size: 2em; margin-bottom: 10px; display: block; }
+        h2 { color: #f0f6fc; margin-top: 0; font-size: 1.4em; }
+        .project-card { background: #21262d; border-radius: 6px; padding: 12px; margin-top: 15px; }
+        .project-card h3 { margin: 0; color: #58a6ff; font-size: 1.1em; }
+        .tags { margin-top: 8px; }
+        .tag { background: #388bfd26; color: #58a6ff; padding: 2px 8px; border-radius: 10px; font-size: 0.75em; margin-right: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Catalog Proiecte</h1>
+    <p>Software Developer | Student UTCB</p>
+</div>
+
+<div class="container">
+    <!-- Folder 1: FullStack -->
+    <div class="folder">
+        <span class="folder-icon">📁</span>
+        <h2>FullStack</h2>
+        <div class="project-card">
+            <h3>Sistem Bancar & Librărie</h3>
+            <p>Ecosistem Java & Android cu sincronizare TCP/IP.</p>
+            <div class="tags"><span class="tag">Java</span><span class="tag">Android</span></div>
+        </div>
+        <div class="project-card">
+            <h3>Integrated Software System</h3>
+            <p>Sistem prezentat la sesiunea științifică din mai 2026.</p>
+            <div class="tags"><span class="tag">Architecture</span></div>
+        </div>
+    </div>
+
+    <!-- Folder 2: Legacy -->
+    <div class="folder">
+        <span class="folder-icon">📁</span>
+        <h2>Legacy</h2>
+        <div class="project-card">
+            <h3>Fundamente C++</h3>
+            <p>Proiecte de logică și algoritmi realizate în 2023.</p>
+            <div class="tags"><span class="tag">C++</span></div>
+        </div>
+        <div class="project-card">
+            <h3>Automatizări Python</h3>
+            <p>Scripting și diverse utilitare dezvoltate în 2024.</p>
+            <div class="tags"><span class="tag">Python</span></div>
+        </div>
+    </div>
+
+    <!-- Folder 3: LowCode -->
+    <div class="folder">
+        <span class="folder-icon">📁</span>
+        <h2>LowCode</h2>
+        <div class="project-card">
+            <h3>PowerApps Solutions</h3>
+            <p>Aplicații de business și fluxuri de lucru automatizate.</p>
+            <div class="tags"><span class="tag">PowerApps</span></div>
+        </div>
+        <div class="project-card">
+            <h3>UE5 Prototyping</h3>
+            <p>Dezvoltare medii și mecanici în Unreal Engine 5.</p>
+            <div class="tags"><span class="tag">UE5</span></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
