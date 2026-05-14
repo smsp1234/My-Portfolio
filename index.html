@@ -2,77 +2,197 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portofoliu Software Developer</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #0d1117; color: #c9d1d9; padding: 40px; line-height: 1.6; }
-        .header { border-bottom: 1px solid #30363d; margin-bottom: 40px; padding-bottom: 20px; }
-        .container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .folder { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px; position: relative; }
-        .folder:hover { border-color: #58a6ff; }
-        .folder-icon { font-size: 2em; margin-bottom: 10px; display: block; }
-        h2 { color: #f0f6fc; margin-top: 0; font-size: 1.4em; }
-        .project-card { background: #21262d; border-radius: 6px; padding: 12px; margin-top: 15px; }
-        .project-card h3 { margin: 0; color: #58a6ff; font-size: 1.1em; }
-        .tags { margin-top: 8px; }
-        .tag { background: #388bfd26; color: #58a6ff; padding: 2px 8px; border-radius: 10px; font-size: 0.75em; margin-right: 5px; }
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --btn-bg: #21262d;
+            --text-main: #c9d1d9;
+            --text-bright: #f0f6fc;
+            --accent: #58a6ff;
+            --border: #30363d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Sectiunea de Header cu Poza */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            max-width: 800px;
+        }
+
+        .profile-pic-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--card-bg);
+            overflow: hidden;
+            color: var(--accent);
+            font-size: 0.9em;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 { color: var(--text-bright); margin-bottom: 5px; }
+        .subtitle { color: var(--accent); font-weight: 500; margin-top: 0; }
+
+        /* Containerul pentru categorii */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .category-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            transition: border-color 0.3s ease;
+        }
+
+        .category-card:hover {
+            border-color: var(--accent);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .folder-icon { font-size: 1.5em; }
+        h2 { color: var(--text-bright); margin: 0; font-size: 1.3em; }
+
+        /* Butoane Proiecte */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .project-btn {
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            background-color: var(--btn-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-btn:hover {
+            background-color: var(--border);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .project-btn span {
+            color: var(--text-main);
+            font-size: 0.85em;
+            font-weight: normal;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 600px) {
+            .grid-container { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>Catalog Proiecte</h1>
-    <p>Software Developer | Student UTCB</p>
-</div>
-
-<div class="container">
-    <!-- Folder 1: FullStack -->
-    <div class="folder">
-        <span class="folder-icon">📁</span>
-        <h2>FullStack</h2>
-        <div class="project-card">
-            <h3>Sistem Bancar & Librărie</h3>
-            <p>Ecosistem Java & Android cu sincronizare TCP/IP.</p>
-            <div class="tags"><span class="tag">Java</span><span class="tag">Android</span></div>
+    <div class="header">
+        <div class="profile-pic-container">
+            <span>aici adaugi poza</span>
         </div>
-        <div class="project-card">
-            <h3>Integrated Software System</h3>
-            <p>Sistem prezentat la sesiunea științifică din mai 2026.</p>
-            <div class="tags"><span class="tag">Architecture</span></div>
-        </div>
+        <h1>Catalog Proiecte</h1>
+        <p class="subtitle">Software Developer | Student UTCB</p>
     </div>
 
-    <!-- Folder 2: Legacy -->
-    <div class="folder">
-        <span class="folder-icon">📁</span>
-        <h2>Legacy</h2>
-        <div class="project-card">
-            <h3>Fundamente C++</h3>
-            <p>Proiecte de logică și algoritmi realizate în 2023.</p>
-            <div class="tags"><span class="tag">C++</span></div>
+    <div class="grid-container">
+        <div class="category-card">
+            <div class="category-header">
+                <span class="folder-icon">📁</span>
+                <h2>FullStack</h2>
+            </div>
+            <div class="btn-group">
+                <a href="cale-catre-proiect1.html" class="project-btn">
+                    Sistem Bancar & Librărie
+                    <span>Ecosistem Java & Android / TCP-IP</span>
+                </a>
+                <a href="cale-catre-proiect2.html" class="project-btn">
+                    Integrated Software System
+                    <span>Proiect Sesiune Științifică 2026</span>
+                </a>
+            </div>
         </div>
-        <div class="project-card">
-            <h3>Automatizări Python</h3>
-            <p>Scripting și diverse utilitare dezvoltate în 2024.</p>
-            <div class="tags"><span class="tag">Python</span></div>
-        </div>
-    </div>
 
-    <!-- Folder 3: LowCode -->
-    <div class="folder">
-        <span class="folder-icon">📁</span>
-        <h2>LowCode</h2>
-        <div class="project-card">
-            <h3>PowerApps Solutions</h3>
-            <p>Aplicații de business și fluxuri de lucru automatizate.</p>
-            <div class="tags"><span class="tag">PowerApps</span></div>
+        <div class="category-card">
+            <div class="category-header">
+                <span class="folder-icon">📁</span>
+                <h2>Legacy</h2>
+            </div>
+            <div class="btn-group">
+                <a href="cale-catre-proiect3.html" class="project-btn">
+                    Fundamente C++
+                    <span>Algoritmi și Structuri de Date (2023)</span>
+                </a>
+                <a href="cale-catre-proiect4.html" class="project-btn">
+                    Automatizări Python
+                    <span>Scripting și Utilitare (2024)</span>
+                </a>
+            </div>
         </div>
-        <div class="project-card">
-            <h3>UE5 Prototyping</h3>
-            <p>Dezvoltare medii și mecanici în Unreal Engine 5.</p>
-            <div class="tags"><span class="tag">UE5</span></div>
+
+        <div class="category-card">
+            <div class="category-header">
+                <span class="folder-icon">📁</span>
+                <h2>LowCode</h2>
+            </div>
+            <div class="btn-group">
+                <a href="cale-catre-proiect5.html" class="project-btn">
+                    PowerApps Solutions
+                    <span>Aplicații Business & Fluxuri Automate</span>
+                </a>
+                <a href="cale-catre-proiect6.html" class="project-btn">
+                    UE5 Prototyping
+                    <span>Mecanici și Medii Unreal Engine 5</span>
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
 </body>
 </html>
