@@ -3,40 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java + Android Ecosystem - Detalii</title>
+    <title>Java + Android Ecosystem - Detalii Proiect</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #0d1117; color: #c9d1d9; padding: 40px; line-height: 1.6; max-width: 900px; margin: 0 auto; }
-        .back-btn { display: inline-block; margin-bottom: 20px; color: #58a6ff; text-decoration: none; font-weight: bold; }
-        .back-btn:hover { text-decoration: underline; }
-        h1 { color: #f0f6fc; border-bottom: 2px solid #58a6ff; padding-bottom: 10px; }
-        .content-section { background: #161b22; padding: 25px; border-radius: 12px; border: 1px solid #30363d; margin-top: 20px; }
-        .tech-badge { background: #388bfd26; color: #58a6ff; padding: 4px 12px; border-radius: 15px; font-size: 0.85em; margin-right: 10px; }
-        .project-img { width: 100%; border-radius: 8px; margin: 20px 0; border: 1px solid #30363d; }
-        pre { background: #0d1117; padding: 15px; border-radius: 8px; color: #8b949e; overflow-x: auto; font-family: 'Consolas', monospace; border-left: 4px solid #58a6ff; }
+        :root { --bg: #0d1117; --card: #161b22; --accent: #58a6ff; --text: #c9d1d9; --bright: #f0f6fc; --border: #30363d; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; max-width: 1000px; margin: 0 auto; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .back-btn:hover { transform: translateX(-5px); }
+        h1 { color: var(--bright); border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { color: var(--accent); margin-top: 40px; border-left: 4px solid var(--accent); padding-left: 15px; }
+        h3 { color: var(--bright); margin-top: 25px; }
+        .section { background: var(--card); padding: 30px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 30px; }
+        .image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .project-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); transition: 0.3s; cursor: pointer; }
+        .project-img:hover { border-color: var(--accent); transform: scale(1.02); }
+        .tech-tag { background: #388bfd26; color: var(--accent); padding: 4px 12px; border-radius: 15px; font-size: 0.85em; margin-right: 10px; }
+        p { margin-bottom: 15px; }
     </style>
 </head>
 <body>
+
     <a href="index.html" class="back-btn">← Înapoi la Catalog</a>
+
     <h1>Java + Android Ecosystem</h1>
-    <div>
-        <span class="tech-badge">Java SDK</span>
-        <span class="tech-badge">Android Studio</span>
-        <span class="tech-badge">TCP/IP Sockets</span>
+    
+    <div style="margin-bottom: 30px;">
+        <span class="tech-tag">Java SDK</span>
+        <span class="tech-tag">Android Studio</span>
+        <span class="tech-tag">TCP/IP Sockets</span>
+        <span class="tech-tag">AI Integration</span>
     </div>
 
-    <div class="content-section">
-        <h3>Prezentare Generală</h3>
-        <p>Un sistem distribuit complex care integrează un server central de banking cu o aplicație de gestiune a unei librării, totul fiind accesibil și sincronizat în timp real pe dispozitive mobile Android.</p>
+    <div class="section">
+        <h2>1. Log in / Sign up</h2>
+        <p>Securitatea ecosistemului începe cu modulele de autentificare. Pagina de <strong>Log in</strong> asigură accesul utilizatorilor existenți prin validarea credențialelor direct cu serverul central, în timp ce procesul de <strong>Sign up</strong> permite înrolarea de noi utilizatori, creând automat profilele necesare atât în baza de date a băncii, cât și în cea a librăriei.</p>
         
-        <img src="FullStack/java_preview.jpg" alt="Preview Proiect Java" class="project-img">
-
-        <h3>Detalii Tehnice</h3>
-        <pre>
-- Arhitectură Client-Server bazată pe porturi dedicate (5000-5003).
-- Comunicare bidirecțională prin socket-uri TCP/IP.
-- Portarea logicii de desktop pe Android folosind procese asincrone pentru stabilitate.
-- Gestiunea tranzacțiilor financiare și a bazei de date a librăriei.
-        </pre>
+        <div class="image-grid">
+            <img src="Bank1.jpeg" alt="Log in Bank" class="project-img">
+            <img src="Bank2.jpeg" alt="Sign up Bank" class="project-img">
+            <img src="Library1.jpeg" alt="Log in Library" class="project-img">
+            <img src="Library2.jpeg" alt="Sign up Library" class="project-img">
+        </div>
     </div>
+
+    <div class="section">
+        <h2>2. Interfața Utilizatorului</h2>
+        
+        <h3>2.1 Interfața Librăriei</h3>
+        <p>Librăria este compusă din două module principale: <strong>Pagina inițială</strong>, un magazin digital de unde utilizatorul poate explora și cumpăra cărți noi, și <strong>Pagina secundară (eReader)</strong>, un spațiu dedicat lecturii unde sunt disponibile toate cărțile achiziționate, oferind o experiență fluidă și intuitivă.</p>
+        <div class="image-grid">
+            <img src="Library3.jpg" alt="Magazin Librarie" class="project-img">
+            <img src="Library4.jpeg" alt="Vizualizare Carte" class="project-img">
+        </div>
+
+        <h3>2.2 Interfața Băncii</h3>
+        <p>Modulul bancar oferă transparență totală asupra resurselor financiare. <strong>Pagina inițială</strong> prezintă soldul curent și un istoric detaliat al transferurilor efectuate. <strong>Pagina secundară</strong> se concentrează pe managementul cardului, afișând datele acestuia și un grafic interactiv al cheltuielilor lunare pentru o monitorizare eficientă a bugetului.</p>
+        <div class="image-grid">
+            <img src="Bank3.jpg" alt="Istoric si Sold" class="project-img">
+            <img src="Bank4.jpg" alt="Date Card si Grafic" class="project-img">
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. Asistenți AI Integrat</h2>
+        <p>Inovația proiectului constă în asistenții AI dedicați pentru fiecare program. Aceștia nu sunt simpli chatbot-uri; ei au <strong>acces direct la bazele de date</strong>. Aceștia identifică utilizatorul în mod automat și pot interoga istoricul tranzacțiilor băncii sau colecția de cărți a librăriei, oferind informații extrem de precise și personalizate în funcție de nevoile posesorului.</p>
+        <div class="image-grid">
+            <img src="Library5.jpg" alt="AI Asistent Librarie" class="project-img">
+            <img src="Bank5.jpeg" alt="AI Asistent Banca" class="project-img">
+        </div>
+    </div>
+
 </body>
 </html>
