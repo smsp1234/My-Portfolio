@@ -33,7 +33,8 @@
             border: 3px solid var(--accent); margin: 0 auto 20px;
             display: flex; align-items: center; justify-content: center;
             background-color: var(--card-bg); overflow: hidden;
-            color: var(--accent); font-size: 0.9em; padding: 10px;
+            color: var(--accent); font-size: 0.9em; text-align: center;
+            padding: 10px;
         }
 
         .profile-pic-container img { width: 100%; height: 100%; object-fit: cover; }
@@ -76,6 +77,10 @@
         }
 
         .project-btn span { color: var(--text-main); font-size: 0.85em; font-weight: normal; margin-top: 4px; }
+
+        @media (max-width: 600px) {
+            .grid-container { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -96,12 +101,12 @@
             </div>
             <div class="btn-group">
                 <a href="proiect-java.html" class="project-btn">
-                    Java + Android
-                    <span>Ecosistem Bancar & Librărie (TCP/IP)</span>
+                    Java + Android Ecosystem
+                    <span>Sistem bancar cu sincronizare TCP/IP și interfață mobilă</span>
                 </a>
                 <a href="proiect-ue5.html" class="project-btn">
                     Unreal Engine 5
-                    <span>Mecanici și Prototipare Medii 3D</span>
+                    <span>Dezvoltare mecanici complexe și simulare medii 3D interactive</span>
                 </a>
             </div>
         </div>
@@ -113,12 +118,12 @@
             </div>
             <div class="btn-group">
                 <a href="proiect-cpp.html" class="project-btn">
-                    Fundamente C++
-                    <span>Algoritmi și Structuri de Date (2023)</span>
+                    C++ Software Core
+                    <span>Algoritmi fundamentali și gestiunea eficientă a memoriei</span>
                 </a>
                 <a href="proiect-python.html" class="project-btn">
-                    Automatizări Python
-                    <span>Scripting și Utilitare (2024)</span>
+                    Python Scripting & Data
+                    <span>Procesare de date și utilitare pentru optimizarea workflow-ului</span>
                 </a>
             </div>
         </div>
@@ -126,16 +131,16 @@
         <div class="category-card">
             <div class="category-header">
                 <span class="folder-icon">📁</span>
-                <h2>LowCode</h2>
+                <h2>LowCode Solutions</h2>
             </div>
             <div class="btn-group">
                 <a href="proiect-appsheet.html" class="project-btn">
-                    AppSheet
-                    <span>Soluții Mobile Quick-Deploy</span>
+                    AppSheet Mobile
+                    <span>Aplicații mobile scalabile bazate pe baze de date dinamice</span>
                 </a>
                 <a href="proiect-powerapps.html" class="project-btn">
-                    PowerApps
-                    <span>Aplicații Business și Workflows Microsoft</span>
+                    PowerApps Business
+                    <span>Digitalizarea proceselor și automatizarea fluxurilor de lucru Microsoft</span>
                 </a>
             </div>
         </div>
