@@ -1,1 +1,541 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofoliu — Modul Gestiune C++ (Core DB Sandbox)</title>
+    <link rel="stylesheet" href="style.css"> <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
 
+        /* Reset și stiluri de bază conforme cu layout-ul tău din index */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Meniul Lateral (Sidebar) — Identic cu cel din index.html */
+        .sidebar {
+            width: 280px;
+            background-color: #111827;
+            border-right: 1px solid #1f2937;
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sidebar-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #38bdf8;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .sidebar-item {
+            margin-bottom: 12px;
+        }
+
+        .sidebar-link {
+            display: block;
+            padding: 12px 15px;
+            color: #9ca3af;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            color: #ffffff;
+            background-color: #1f2937;
+            border-left: 4px solid #38bdf8;
+            padding-left: 11px;
+        }
+
+        /* Zona de conținut din dreapta (Main Content) */
+        .main-content {
+            margin-left: 280px;
+            flex-grow: 1;
+            padding: 50px 60px;
+            max-width: 1100px;
+        }
+
+        header {
+            margin-bottom: 45px;
+            border-bottom: 1px solid #1f2937;
+            padding-bottom: 25px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            transition: color 0.2s;
+        }
+
+        .back-btn:hover {
+            color: #38bdf8;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #f8fafc;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        /* Secțiuni tip Card */
+        .project-section {
+            background-color: #111827;
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 35px;
+            border: 1px solid #1f2937;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: #38bdf8;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-left: 4px solid #38bdf8;
+            padding-left: 12px;
+        }
+
+        p {
+            color: #94a3b8;
+            margin-bottom: 18px;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            color: #94a3b8;
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        li strong {
+            color: #cbd5e1;
+        }
+
+        .tech-tag {
+            display: inline-block;
+            background-color: #1e293b;
+            color: #38bdf8;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 8px;
+            border: 1px solid #334155;
+        }
+
+        /* === STILURI EMULATOR TERMINAL / CONSOLĂ C++ === */
+        .terminal-container {
+            background-color: #030712;
+            border-radius: 12px;
+            border: 1px solid #374151;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            margin-top: 25px;
+        }
+
+        .terminal-header {
+            background-color: #1f2937;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #374151;
+        }
+
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-red { background-color: #ef4444; }
+        .dot-yellow { background-color: #f59e0b; }
+        .dot-green { background-color: #10b981; }
+
+        .terminal-title {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            font-family: 'Fira Code', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        .terminal-body {
+            padding: 25px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            height: 420px;
+            overflow-y: auto;
+            color: #34d399;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            background-color: #030712;
+        }
+
+        .output-line {
+            white-space: pre-wrap;
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+
+        .input-area {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .prompt {
+            color: #38bdf8;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .cmd-input {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            outline: none;
+            flex: 1;
+        }
+
+        /* Culori mesaje consolă */
+        .terminal-body .success { color: #10b981; }
+        .terminal-body .error { color: #f87171; }
+        .terminal-body .warning { color: #fbbf24; }
+        .terminal-body .info { color: #60a5fa; }
+        .terminal-body .white { color: #ffffff; }
+
+        /* Media queries pentru adaptabilitate pe telefoane */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 20px; }
+            .main-content { margin-left: 0; padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div>
+            <div class="sidebar-brand">PORTFOLIO</div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-item"><a href="index.html" class="sidebar-link">← Înapoi la Acasă</a></li>
+                <li class="sidebar-item"><a href="#despre" class="sidebar-link active">1. Despre Modul</a></li>
+                <li class="sidebar-item"><a href="#arhitectura" class="sidebar-link">2. Arhitectură Standard</a></li>
+                <li class="sidebar-item"><a href="#failsafe" class="sidebar-link">3. Gestiune Safe Input</a></li>
+                <li class="sidebar-item"><a href="#live-demo" class="sidebar-link">4. Consolă Live (Demo)</a></li>
+            </ul>
+        </div>
+        <div style="color: #4b5563; font-size: 0.8rem; padding-left: 15px;">
+            © 2026 Developer Build
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header>
+            <a href="index.html" class="back-btn">← Înapoi la dashboard</a>
+            <h1>Sistem Gestiune Bibliotecă (C++ Core)</h1>
+            <div class="subtitle">Componentă locală de persistență a datelor și manipulare a containerelor dinamice STL</div>
+        </header>
+
+        <section id="despre" class="project-section">
+            <h2>1. Despre Proiect</h2>
+            <p>Acest program reprezintă modulul local de bază dedicat gestionării structurilor de date complexe, creat cu scopul de a izola și valida algoritmii de căutare avansată, maparea ID-urilor auto-incrementate și persistența fișierelor fără overhead-ul unui server extern. Sistemul rulează direct în linia de comandă și manipulează înregistrările în timp real în memoria RAM a procesului.</p>
+            <div style="margin-top: 15px;">
+                <span class="tech-tag">C++17 ISO Standard</span>
+                <span class="tech-tag">STL Vectors</span>
+                <span class="tech-tag">Input/Output Streams</span>
+                <span class="tech-tag">Data Serialization</span>
+            </div>
+        </section>
+
+        <section id="arhitectura" class="project-section">
+            <h2>2. Arhitectură Tehnică & Logica Structurilor</h2>
+            <p>La baza aplicației se află o structură atomică denumită <code>Book</code>, controlată dinamic la nivel global printr-un container liniar securizat:</p>
+            <ul>
+                <li><strong>Manipulare Vectorială:</strong> Datele sunt controlate printr-un <code>std::vector&lt;Book&gt;</code>. Adăugarea folosește mecanisme de auto-incrementare sigure, mapate în funcție de ultima entitate activă din memorie.</li>
+                <li><strong>Filtrare Case-Insensitive:</strong> Algoritmul de căutare multicriterială folosește funcția standard <code>std::transform</code> pentru a converti string-urile din buffer în caractere mici (<em>lowercase</em>), oferind rezultate precise indiferent de tipul de scriere ales de utilizator.</li>
+                <li><strong>Ștergere Modernă prin Predicate:</strong> Eliminarea înregistrărilor din memorie nu folosește bucle repetitive ineficiente, ci implementează algoritmul optimizat <code>std::remove_if</code> combinat cu o expresie Lambda bazată pe ID-ul cărții, urmată de eliberarea spațiului prin metoda <code>.erase()</code>.</li>
+            </ul>
+        </section>
+
+        <section id="failsafe" class="project-section">
+            <h2>3. Sistem Failsafe & Persistența Datelor</h2>
+            <p>O atenție deosebită a fost acordată tratării excepțiilor de tastatură din terminal și manipulării fluxurilor de date externe:</p>
+            <ul>
+                <li><strong>Protecție împotriva Input-ului Corupt:</strong> Când utilizatorul introduce din greșeală caractere alfabetice în locul unui număr întreg (la An sau ID), fluxul <code>std::cin</code> se blochează în mod normal într-o buclă infinită. Modulul previne acest comportament prin detectarea stării de eșec a stream-ului, apelarea metodei <code>cin.clear()</code> și golirea completă a buffer-ului rezidual prin <code>cin.ignore()</code>.</li>
+                <li><strong>Serializare CSV Custom:</strong> Salvarea și încărcarea bazei de date se realizează prin procesarea secvențială a fișierelor prin <code>std::ifstream</code> și <code>std::ofstream</code>, utilizând caracterul <code>';'</code> ca separator de câmpuri, permițând parsarea sigură inclusiv a titlurilor ce conțin spații libere.</li>
+            </ul>
+        </section>
+
+        <section id="live-demo" class="project-section">
+            <h2>4. Consolă Interactivă (Live Sandbox)</h2>
+            <p>Mai jos se află o replică funcțională 100% fidelă a comportamentului executabilului C++ compilat nativ. Această consolă simulează perfect logica din funcția <code>main()</code> (adaugă elemente, restabilește catalogul din fișierul text simulat și blochează operațiunile periculoase dacă nu sunt confirmate):</p>
+
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <div class="terminal-buttons">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                    </div>
+                    <div class="terminal-title">biblioteca_manager.exe — Console Engine</div>
+                    <div></div>
+                </div>
+                <div class="terminal-body" id="terminalBody">
+                    <div class="output-line info">Datele au fost încărcate cu succes. Total cărți în baza de date locală: 2</div>
+                    <div id="outputArea"></div>
+                    <div class="input-area" id="inputAreaElement">
+                        <span class="prompt" id="promptText">Opțiune:</span>
+                        <input type="text" class="cmd-input" id="terminalInput" autofocus autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Vectorul global de structuri simulat (std::vector<Book> library)
+        let cppLibrary = [
+            { id: 1, title: "Baltagul", author: "Mihail Sadoveanu", year: 1930 },
+            { id: 2, title: "Ion", author: "Liviu Rebreanu", year: 1920 }
+        ];
+        let cppNextId = 3;
+        let cppFilename = "biblioteca.txt";
+
+        const cppOutputArea = document.getElementById('outputArea');
+        const cppTerminalInput = document.getElementById('terminalInput');
+        const cppPromptText = document.getElementById('promptText');
+        const cppTerminalBody = document.getElementById('terminalBody');
+
+        // State Machine pentru replicarea comportamentului switch(choice) din C++
+        let cppCurrentStep = "MENU"; 
+        let cppTempTitle = "", cppTempAuthor = "";
+        let cppTempSearchOpt = 0;
+
+        function cppPrint(text, type = '') {
+            const line = document.createElement('div');
+            line.className = 'output-line' + (type ? ' ' + type : '');
+            line.innerText = text;
+            cppOutputArea.appendChild(line);
+            cppTerminalBody.scrollTop = cppTerminalBody.scrollHeight;
+        }
+
+        function cppShowMenu() {
+            cppPrint("\n--- SISTEM GESTIUNE BIBLIOTECA ---");
+            cppPrint("1. Afișare catalog complet");
+            cppPrint("2. Adăugare carte nouă");
+            cppPrint("3. Căutare avansată (Titlu/Autor/An)");
+            cppPrint("4. Ștergere carte după ID");
+            cppPrint("5. Salvare modificări în fișier");
+            cppPrint("6. Ștergere TOTALĂ bază de date");
+            cppPrint("7. Ieșire");
+            cppPrint("-------------------------------------");
+            cppPromptText.innerText = "Opțiune: ";
+            cppCurrentStep = "MENU";
+        }
+
+        // Inițializare Terminal
+        if(cppTerminalInput) {
+            cppShowMenu();
+
+            cppTerminalInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    let input = cppTerminalInput.value.trim();
+                    cppTerminalInput.value = "";
+                    // Replicare ecou comandă în consolă pentru realism ridicat
+                    cppPrint(cppPromptText.innerText + input, 'white');
+                    cppHandleInput(input);
+                }
+            });
+
+            // Forțează focusarea pe input la click pe terminal
+            cppTerminalBody.addEventListener('click', () => cppTerminalInput.focus());
+        }
+
+        // Interceptorul mașinii de stări din terminal
+        function cppHandleInput(input) {
+            if (cppCurrentStep === "MENU") {
+                switch(input) {
+                    case "1":
+                        cppDisplayLibrary();
+                        cppShowMenu();
+                        break;
+                    case "2":
+                        cppCurrentStep = "ADD_TITLE";
+                        cppPromptText.innerText = "Titlu: ";
+                        break;
+                    case "3":
+                        cppCurrentStep = "SEARCH_OPT";
+                        cppPrint("Caută după (1.Titlu, 2.Autor, 3.An): ");
+                        cppPromptText.innerText = "Opțiune: ";
+                        break;
+                    case "4":
+                        cppCurrentStep = "DELETE_ID";
+                        cppPromptText.innerText = "Introdu ID-ul cărții pentru ștergere: ";
+                        break;
+                    case "5":
+                        cppPrint(`\n[SUCCESS] Modificările au fost salvate în fișierul "${cppFilename}".`, 'success');
+                        cppShowMenu();
+                        break;
+                    case "6":
+                        cppCurrentStep = "CONFIRM_DELETE";
+                        cppPromptText.innerText = "Sigur dorești ștergerea TOTALĂ a bazei de date? (y/n): ";
+                        break;
+                    case "7":
+                        cppPrint("\nSe închide programul. Toate modificările nesalvate au fost pierdute!", 'warning');
+                        document.getElementById('inputAreaElement').style.display = 'none';
+                        break;
+                    default:
+                        cppPrint("Opțiune invalidă. Încearcă din nou (1-7).", 'error');
+                        cppShowMenu();
+                }
+            } 
+            // Sub-stările procesului de adăugare carte (cin >> t ...)
+            else if (cppCurrentStep === "ADD_TITLE") {
+                if(!input) { cppPrint("Titlul nu poate fi gol!", "error"); return; }
+                cppTempTitle = input;
+                cppCurrentStep = "ADD_AUTHOR";
+                cppPromptText.innerText = "Autor: ";
+            } else if (cppCurrentStep === "ADD_AUTHOR") {
+                if(!input) { cppPrint("Autorul nu poate fi gol!", "error"); return; }
+                cppTempAuthor = input;
+                cppCurrentStep = "ADD_YEAR";
+                cppPromptText.innerText = "An apariție: ";
+            } else if (cppCurrentStep === "ADD_YEAR") {
+                let year = parseInt(input);
+                if (isNaN(year)) {
+                    cppPrint("An invalid! Introdu un număr întreg corect: ", "error");
+                    return;
+                }
+                cppLibrary.push({ id: cppNextId, title: cppTempTitle, author: cppTempAuthor, year: year });
+                cppPrint(`\n[SUCCESS] Cartea "${cppTempTitle}" a fost adăugată în vector cu ID-ul: ${cppNextId}`, 'success');
+                cppNextId++;
+                cppShowMenu();
+            }
+            // Sub-stările procesului de căutare
+            else if (cppCurrentStep === "SEARCH_OPT") {
+                let opt = parseInt(input);
+                if (isNaN(opt) || opt < 1 || opt > 3) {
+                    cppPrint("Opțiune invalidă! Alege doar din criteriile 1, 2 sau 3: ", "error");
+                    return;
+                }
+                cppTempSearchOpt = opt;
+                cppCurrentStep = "SEARCH_KEY";
+                cppPromptText.innerText = "Cuvânt cheie pentru căutare: ";
+            } else if (cppCurrentStep === "SEARCH_KEY") {
+                cppSearchBooks(input, cppTempSearchOpt);
+                cppShowMenu();
+            }
+            // Sub-starea de ștergere element din vector
+            else if (cppCurrentStep === "DELETE_ID") {
+                let id = parseInt(input);
+                if (isNaN(id)) {
+                    cppPrint("ID invalid! Trebuie să introduci o valoare numerică: ", "error");
+                    return;
+                }
+                let index = cppLibrary.findIndex(b => b.id === id);
+                if (index !== -1) {
+                    cppLibrary.splice(index, 1);
+                    cppPrint(`\n[SUCCESS] Cartea cu ID-ul ${id} a fost eliminată din memorie prin algoritmul remove_if.`, 'success');
+                } else {
+                    cppPrint(`\n[ERROR] ID-ul ${id} nu a fost localizat în structură.`, 'error');
+                }
+                cppShowMenu();
+            }
+            // Starea de siguranță pentru ștergerea completă (ios::trunc)
+            else if (cppCurrentStep === "CONFIRM_DELETE") {
+                if (input.toLowerCase() === 'y' || input.toLowerCase() === 'yes') {
+                    cppLibrary = [];
+                    cppPrint("\n[WARNING] Fișierul a fost trunchiat. Toate datele au fost eliminate definitiv din RAM și disc.", 'warning');
+                } else {
+                    cppPrint("Operațiune anulată cu succes.");
+                }
+                cppShowMenu();
+            }
+        }
+
+        // Simulare funcție tabulară display folosind padding structural ca în <iomanip>
+        function cppDisplayLibrary() {
+            if (cppLibrary.length === 0) {
+                cppPrint("\nBiblioteca este goală în acest moment. Vector gol.", 'warning');
+                return;
+            }
+            cppPrint("\n==================== INVENTAR BIBLIOTECA ====================");
+            cppPrint("ID    | Titlu                          | Autor                    | An");
+            cppPrint("-------------------------------------------------------------");
+            cppLibrary.forEach(book => {
+                let idStr = book.id.toString().padEnd(5);
+                let titleStr = (book.title.length > 28 ? book.title.substring(0, 25) + "..." : book.title).padEnd(30);
+                let authorStr = (book.author.length > 22 ? book.author.substring(0, 19) + "..." : book.author).padEnd(25);
+                cppPrint(`${idStr} | ${titleStr} | ${authorStr} | ${book.year}`);
+            });
+            cppPrint("=============================================================");
+        }
+
+        // Simulare algoritm de căutare case-insensitive string::npos
+        function cppSearchBooks(keyword, option) {
+            let found = false;
+            cppPrint(`\nRezultate căutare în memorie pentru "${keyword}":`);
+            let lowKey = keyword.toLowerCase();
+            cppLibrary.forEach(book => {
+                let match = false;
+                if (option === 1 && book.title.toLowerCase().includes(lowKey)) match = true;
+                else if (option === 2 && book.author.toLowerCase().includes(lowKey)) match = true;
+                else if (option === 3 && book.year.toString() === lowKey) match = true;
+
+                if (match) {
+                    cppPrint(`[ID: ${book.id}] ${book.title} - ${book.author} (${book.year})`);
+                    found = true;
+                }
+            });
+            if (!found) cppPrint("Nu s-a găsit nicio potrivire în baza de date.");
+        }
+    </script>
+</body>
+</html>
