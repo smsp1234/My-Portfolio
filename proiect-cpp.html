@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portofoliu — Modul Gestiune C++ (Core DB Sandbox)</title>
-    <link rel="stylesheet" href="style.css"> <style>
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
 
-        /* Reset și stiluri de bază conforme cu layout-ul tău din index */
+        /* Reset și stiluri de bază */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -18,64 +18,16 @@
             background-color: #0b0f19;
             color: #e2e8f0;
             font-family: 'Inter', sans-serif;
-            display: flex;
             min-height: 100vh;
             overflow-x: hidden;
-        }
-
-        /* Meniul Lateral (Sidebar) — Identic cu cel din index.html */
-        .sidebar {
-            width: 280px;
-            background-color: #111827;
-            border-right: 1px solid #1f2937;
-            padding: 30px 20px;
-            position: fixed;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .sidebar-brand {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #38bdf8;
-            letter-spacing: 1px;
-            margin-bottom: 40px;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            flex-grow: 1;
-        }
-
-        .sidebar-item {
-            margin-bottom: 12px;
-        }
-
-        .sidebar-link {
             display: block;
-            padding: 12px 15px;
-            color: #9ca3af;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.2s ease;
         }
 
-        .sidebar-link:hover, .sidebar-link.active {
-            color: #ffffff;
-            background-color: #1f2937;
-            border-left: 4px solid #38bdf8;
-            padding-left: 11px;
-        }
-
-        /* Zona de conținut din dreapta (Main Content) */
+        /* Zona de conținut - acum centrată și pe toată lățimea */
         .main-content {
-            margin-left: 280px;
-            flex-grow: 1;
-            padding: 50px 60px;
             max-width: 1100px;
+            margin: 0 auto;
+            padding: 50px 40px;
         }
 
         header {
@@ -91,11 +43,13 @@
             text-decoration: none;
             font-size: 0.9rem;
             margin-bottom: 15px;
-            transition: color 0.2s;
+            transition: color 0.2s, transform 0.2s;
+            font-weight: 600;
         }
 
         .back-btn:hover {
             color: #38bdf8;
+            transform: translateX(-5px);
         }
 
         h1 {
@@ -243,38 +197,18 @@
             flex: 1;
         }
 
-        /* Culori mesaje consolă */
         .terminal-body .success { color: #10b981; }
         .terminal-body .error { color: #f87171; }
         .terminal-body .warning { color: #fbbf24; }
         .terminal-body .info { color: #60a5fa; }
         .terminal-body .white { color: #ffffff; }
 
-        /* Media queries pentru adaptabilitate pe telefoane */
         @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; padding: 20px; }
-            .main-content { margin-left: 0; padding: 30px 20px; }
+            .main-content { padding: 30px 20px; }
         }
     </style>
 </head>
 <body>
-
-    <nav class="sidebar">
-        <div>
-            <div class="sidebar-brand">PORTFOLIO</div>
-            <ul class="sidebar-menu">
-                <li class="sidebar-item"><a href="index.html" class="sidebar-link">← Înapoi la Acasă</a></li>
-                <li class="sidebar-item"><a href="#despre" class="sidebar-link active">1. Despre Modul</a></li>
-                <li class="sidebar-item"><a href="#arhitectura" class="sidebar-link">2. Arhitectură Standard</a></li>
-                <li class="sidebar-item"><a href="#failsafe" class="sidebar-link">3. Gestiune Safe Input</a></li>
-                <li class="sidebar-item"><a href="#live-demo" class="sidebar-link">4. Consolă Live (Demo)</a></li>
-            </ul>
-        </div>
-        <div style="color: #4b5563; font-size: 0.8rem; padding-left: 15px;">
-            © 2026 Developer Build
-        </div>
-    </nav>
 
     <main class="main-content">
         <header>
@@ -283,7 +217,7 @@
             <div class="subtitle">Componentă locală de persistență a datelor și manipulare a containerelor dinamice STL</div>
         </header>
 
-        <section id="despre" class="project-section">
+        <section class="project-section">
             <h2>1. Despre Proiect</h2>
             <p>Acest program reprezintă modulul local de bază dedicat gestionării structurilor de date complexe, creat cu scopul de a izola și valida algoritmii de căutare avansată, maparea ID-urilor auto-incrementate și persistența fișierelor fără overhead-ul unui server extern. Sistemul rulează direct în linia de comandă și manipulează înregistrările în timp real în memoria RAM a procesului.</p>
             <div style="margin-top: 15px;">
@@ -294,7 +228,7 @@
             </div>
         </section>
 
-        <section id="arhitectura" class="project-section">
+        <section class="project-section">
             <h2>2. Arhitectură Tehnică & Logica Structurilor</h2>
             <p>La baza aplicației se află o structură atomică denumită <code>Book</code>, controlată dinamic la nivel global printr-un container liniar securizat:</p>
             <ul>
@@ -304,16 +238,16 @@
             </ul>
         </section>
 
-        <section id="failsafe" class="project-section">
+        <section class="project-section">
             <h2>3. Sistem Failsafe & Persistența Datelor</h2>
             <p>O atenție deosebită a fost acordată tratării excepțiilor de tastatură din terminal și manipulării fluxurilor de date externe:</p>
             <ul>
                 <li><strong>Protecție împotriva Input-ului Corupt:</strong> Când utilizatorul introduce din greșeală caractere alfabetice în locul unui număr întreg (la An sau ID), fluxul <code>std::cin</code> se blochează în mod normal într-o buclă infinită. Modulul previne acest comportament prin detectarea stării de eșec a stream-ului, apelarea metodei <code>cin.clear()</code> și golirea completă a buffer-ului rezidual prin <code>cin.ignore()</code>.</li>
-                <li><strong>Serializare CSV Custom:</strong> Salvarea și încărcarea bazei de date se realizează prin procesarea secvențială a fișierelor prin <code>std::ifstream</code> și <code>std::ofstream</code>, utilizând caracterul <code>';'</code> ca separator de câmpuri, permițând parsarea sigură inclusiv a titlurilor ce conțin spații libere.</li>
+                <li><strong>Serializare CSV Custom:</strong> Salvarea și încărcarea bazei de date se realiză prin procesarea secvențială a fișierelor prin <code>std::ifstream</code> și <code>std::ofstream</code>, utilizând caracterul <code>';'</code> ca separator de câmpuri, permițând parsarea sigură inclusiv a titlurilor ce conțin spații libere.</li>
             </ul>
         </section>
 
-        <section id="live-demo" class="project-section">
+        <section class="project-section">
             <h2>4. Consolă Interactivă (Live Sandbox)</h2>
             <p>Mai jos se află o replică funcțională 100% fidelă a comportamentului executabilului C++ compilat nativ. Această consolă simulează perfect logica din funcția <code>main()</code> (adaugă elemente, restabilește catalogul din fișierul text simulat și blochează operațiunile periculoase dacă nu sunt confirmate):</p>
 
@@ -340,7 +274,6 @@
     </main>
 
     <script>
-        // Vectorul global de structuri simulat (std::vector<Book> library)
         let cppLibrary = [
             { id: 1, title: "Baltagul", author: "Mihail Sadoveanu", year: 1930 },
             { id: 2, title: "Ion", author: "Liviu Rebreanu", year: 1920 }
@@ -353,7 +286,6 @@
         const cppPromptText = document.getElementById('promptText');
         const cppTerminalBody = document.getElementById('terminalBody');
 
-        // State Machine pentru replicarea comportamentului switch(choice) din C++
         let cppCurrentStep = "MENU"; 
         let cppTempTitle = "", cppTempAuthor = "";
         let cppTempSearchOpt = 0;
@@ -380,7 +312,6 @@
             cppCurrentStep = "MENU";
         }
 
-        // Inițializare Terminal
         if(cppTerminalInput) {
             cppShowMenu();
 
@@ -388,17 +319,14 @@
                 if (e.key === 'Enter') {
                     let input = cppTerminalInput.value.trim();
                     cppTerminalInput.value = "";
-                    // Replicare ecou comandă în consolă pentru realism ridicat
                     cppPrint(cppPromptText.innerText + input, 'white');
                     cppHandleInput(input);
                 }
             });
 
-            // Forțează focusarea pe input la click pe terminal
             cppTerminalBody.addEventListener('click', () => cppTerminalInput.focus());
         }
 
-        // Interceptorul mașinii de stări din terminal
         function cppHandleInput(input) {
             if (cppCurrentStep === "MENU") {
                 switch(input) {
@@ -436,7 +364,6 @@
                         cppShowMenu();
                 }
             } 
-            // Sub-stările procesului de adăugare carte (cin >> t ...)
             else if (cppCurrentStep === "ADD_TITLE") {
                 if(!input) { cppPrint("Titlul nu poate fi gol!", "error"); return; }
                 cppTempTitle = input;
@@ -458,7 +385,6 @@
                 cppNextId++;
                 cppShowMenu();
             }
-            // Sub-stările procesului de căutare
             else if (cppCurrentStep === "SEARCH_OPT") {
                 let opt = parseInt(input);
                 if (isNaN(opt) || opt < 1 || opt > 3) {
@@ -472,7 +398,6 @@
                 cppSearchBooks(input, cppTempSearchOpt);
                 cppShowMenu();
             }
-            // Sub-starea de ștergere element din vector
             else if (cppCurrentStep === "DELETE_ID") {
                 let id = parseInt(input);
                 if (isNaN(id)) {
@@ -488,7 +413,6 @@
                 }
                 cppShowMenu();
             }
-            // Starea de siguranță pentru ștergerea completă (ios::trunc)
             else if (cppCurrentStep === "CONFIRM_DELETE") {
                 if (input.toLowerCase() === 'y' || input.toLowerCase() === 'yes') {
                     cppLibrary = [];
@@ -500,7 +424,6 @@
             }
         }
 
-        // Simulare funcție tabulară display folosind padding structural ca în <iomanip>
         function cppDisplayLibrary() {
             if (cppLibrary.length === 0) {
                 cppPrint("\nBiblioteca este goală în acest moment. Vector gol.", 'warning');
@@ -518,7 +441,6 @@
             cppPrint("=============================================================");
         }
 
-        // Simulare algoritm de căutare case-insensitive string::npos
         function cppSearchBooks(keyword, option) {
             let found = false;
             cppPrint(`\nRezultate căutare în memorie pentru "${keyword}":`);
