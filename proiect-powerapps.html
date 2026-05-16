@@ -1,249 +1,73 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofoliu — Soluții Low-Code</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
-
-        /* Reset și stiluri de bază */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-            display: block;
-            line-height: 1.6;
-        }
-
-        /* Zona de conținut complet centrată */
-        .main-content {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 50px 40px;
-        }
-
-        header {
-            margin-bottom: 45px;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 25px;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            color: #58a6ff;
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            transition: color 0.2s, transform 0.2s;
-            font-weight: 600;
-        }
-
-        .back-btn:hover {
-            color: #79c0ff;
-            transform: translateX(-5px);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: #f0f6fc;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            color: #8b949e;
-            font-size: 1.1rem;
-        }
-
-        /* Secțiuni tip Card */
-        .project-section {
-            background-color: #161b22;
-            border-radius: 12px;
-            padding: 35px;
-            margin-bottom: 45px;
-            border: 1px solid #30363d;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            color: #58a6ff;
-            margin-bottom: 20px;
-            font-weight: 600;
-            border-left: 4px solid #58a6ff;
-            padding-left: 12px;
-        }
-
-        h3 {
-            font-size: 1.1rem;
-            color: #f0f6fc;
-            margin: 25px 0 10px 0;
-            font-weight: 600;
-        }
-
-        p {
-            color: #8b949e;
-            margin-bottom: 18px;
-            font-size: 1rem;
-            text-align: justify;
-        }
-
-        ul {
-            margin-left: 20px;
-            margin-bottom: 20px;
-            color: #8b949e;
-        }
-
-        li {
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-
-        li strong {
-            color: #f0f6fc;
-        }
-
-        .tech-tags {
-            margin-top: 15px;
-            margin-bottom: 25px;
-        }
-
-        .tech-tag {
-            display: inline-block;
-            background-color: #388bfd26;
-            color: #58a6ff;
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-right: 8px;
-            margin-bottom: 8px;
-            border: 1px solid #388bfd4d;
-        }
-
-        code {
-            font-family: 'Fira Code', monospace;
-            background-color: #21262d;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: #ff7b72;
-            font-size: 0.9em;
-        }
-
-        /* === GRID PENTRU IMAGINI === */
-        .image-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
-            margin-bottom: 15px;
-        }
-
-        .screenshot-container {
-            background-color: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .screenshot-container img {
-            width: 100%;
-            height: auto;
-            border-radius: 6px;
-            border: 1px solid #21262d;
-            object-fit: cover;
-        }
-
-        .image-caption {
-            font-size: 0.85rem;
-            color: #8b949e;
-            margin-top: 12px;
-            font-family: 'Fira Code', monospace;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .main-content { padding: 30px 20px; }
-            .project-section { padding: 25px; }
-        }
-    </style>
-</head>
-<body>
-
-    <main class="main-content">
-        <header>
+<header>
             <a href="index.html" class="back-btn">← Înapoi la dashboard</a>
-            <h1>Dezvoltare Low-Code & Soluții Enterprise</h1>
-            <div class="subtitle">Sisteme de gestiune a resurselor, arhitecturi Canvas App și optimizarea experienței utilizatorului (UX)</div>
+            <h1>Microsoft PowerApps — Sistem Complet de Gestiune Bibliotecă Virtuală</h1>
+            <div class="subtitle">Arhitectură Canvas App orientată pe fluxul utilizatorului (User Journey) și gestiunea corelată a datelor</div>
         </header>
 
         <section class="project-section">
-            <h2>Microsoft PowerApps — Aplicație Client pentru Gestiunea și Împrumutul unei Biblioteci Virtuale</h2>
+            <h2>Arhitectura și Fluxul de Navigare al Aplicației</h2>
             
             <div class="tech-tags">
                 <span class="tech-tag">Microsoft PowerApps</span>
                 <span class="tech-tag">Canvas App Architecture</span>
-                <span class="tech-tag">User Authentication Flow</span>
-                <span class="tech-tag">Relational Database Integration</span>
-                <span class="tech-tag">Time & Return Tracking Logic</span>
+                <span class="tech-tag">User Journey Design</span>
+                <span class="tech-tag">Relational Database</span>
+                <span class="tech-tag">Time Tracking Logic</span>
             </div>
 
-            <p>Acest proiect reprezintă o platformă software completă dedicată utilizatorilor finali pentru interacțiunea fluidă cu o bibliotecă virtuală modernă. Dezvoltată în mediu PowerApps Canvas App, aplicația acoperă întregul flux operațional: de la securizarea accesului prin ecrane dedicate de autentificare, până la navigarea ierarhică în catalog, inițierea cererilor de rezervare și monitorizarea automată a termenelor limită pentru restituirea volumelor împrumutate.</p>
+            <p>Această aplicație enterprise a fost dezvoltată în mediu PowerApps Canvas App pentru a digitaliza complet interacțiunea dintre cititori și o bibliotecă virtuală. Structura proiectului urmărește un flux logic de utilizare, oferind o interfață intuitivă ce securizează accesul, fluidizează rezervările și monitorizează termenele de restituire.</p>
 
-            <h3>Arhitectura Fluxului de Lucru și Module Tehnice</h3>
-            <ul>
-                <li><strong>Poarta de Acces și Autentificare (Welcome & Identity Hub):</strong> Aplicația implementează un ecran de pornire intuitiv ce separă fluxurile de utilizatori prin două acțiuni principale: Log In și Sign Up. Acestea deschid formulare custom de colectare și verificare a credențialelor, conectate securizat la baza de date backend pentru validarea profilului de cititor.</li>
-                <li><strong>Meniu Centralizat de Navigare (Hub-ul de Comenzi):</strong> După autentificare, utilizatorul este direcționat către un panou principal (Dashboard) optimizat structural pentru trei cazuri majore de utilizare:
-                    <ul>
-                        <li>Consultarea directă a fondului de carte disponibil în bibliotecă.</li>
-                        <li>Trimiterea instantanee a unei cereri de rezervare pentru un nou împrumut.</li>
-                        <li>Vizualizarea situației curente a cărților aflate în posesia utilizatorului, corelată cu un sistem de alertă temporală pentru data limită de returnare.</li>
-                    </ul>
-                </li>
-                <li><strong>Modul de Urmărire a Împrumuturilor Active:</strong> Un ecran specializat care extrage dinamic înregistrările utilizatorului logat. Acesta calculează și afișează în timp real zilele rămase până la expirarea termenului, prevenind penalizările prin indicatori vizuali clari.</li>
-                <li><strong>Catalogul Dinamic de Cărți Disponibile:</strong> Un tab organizat sub formă de galerie interactivă ce listează toate resursele din bibliotecă, permițând căutarea rapidă, filtrarea pe categorii și accesarea fișei tehnice a fiecărui volum înainte de solicitarea împrumutului.</li>
-            </ul>
-
+            <h3>1. Ecranul de Pornire (Welcome Screen)</h3>
+            <p>La deschiderea aplicației, utilizatorul este întâmpinat de o interfață minimalistă și aerisită, concepută pentru a iniția sesiunea de lucru. Acest ecran centralizează opțiunile principale de acces prin două butoane mari de acțiune: <code>Log In</code> (pentru utilizatorii existenți în baza de date) și <code>Sign Up</code> (pentru crearea unui profil nou de cititor). Designul ghidează vizual pașii inițiali fără a aglomera experiența utilizatorului.</p>
+            
             <div class="image-gallery">
                 <div class="screenshot-container">
                     <img src="PowerApp1.jpg" alt="Ecran Welcome">
-                    <div class="image-caption">Fig 1.1 - Ecranul principal de Welcome (Optiuni Log In / Sign Up)</div>
+                    <div class="image-caption">Fig 1.1 - Ecranul de Welcome cu opțiunile Log In și Sign Up</div>
+                </div>
+            </div>
+
+            <h3>2. Autentificarea și Înregistrarea (Log In & Sign Up)</h3>
+            <p>Secțiunea de gestiune a identității este împărțită în două ecrane corelate. Formularul de <code>Log In</code> colectează și validează credențialele utilizatorului în raport cu serverul de stocare backend. În oglindă, ecranul de <code>Sign Up</code> permite înrolarea securizată a noilor cititori, integrând câmpuri de input specifice și validări de sistem pentru păstrarea integrității datelor înainte ca profilul să fie salvat în baza de date relațională.</p>
+            
+            <div class="image-gallery">
+                <div class="screenshot-container">
+                    <img src="PowerApp2.jpg" alt="Interfață Log In">
+                    <div class="image-caption">Fig 1.2 - Formularul pentru logarea utilizatorilor existenți</div>
                 </div>
                 <div class="screenshot-container">
-                    <img src="PowerApp2.jpg" alt="Interfață Log In / Sign Up">
-                    <div class="image-caption">Fig 1.2 - Formularul securizat pentru autentificarea utilizatorilor în sistem</div>
+                    <img src="PowerApp3.png" alt="Flux Înregistrare Cont Nou">
+                    <div class="image-caption">Fig 1.3 - Ecranul de Sign Up pentru crearea și validarea profilului</div>
                 </div>
-                <div class="screenshot-container">
-                    <img src="PowerApp3.png" alt="Flux Înregistrare">
-                    <div class="image-caption">Fig 1.3 - Ecranul de creare cont nou (Sign Up) cu validarea datelor</div>
-                </div>
+            </div>
+
+            <h3>3. Panoul Central de Comenzi (Meniu Opțiuni)</h3>
+            <p>După autentificarea cu succes, utilizatorul ajunge în hub-ul principal al aplicației. Acest meniu general structurează arhitectura de navigare în trei direcții operaționale majore, mapate direct pe nevoile cititorului: opțiunea de a consulta catalogul general de cărți din bibliotecă, modulul pentru trimiterea unei cereri de rezervare în vederea unui împrumut nou și zona de monitorizare a cărților deținute în mod curent.</p>
+            
+            <div class="image-gallery">
                 <div class="screenshot-container">
                     <img src="PowerApp4.jpg" alt="Meniu Principal de Navigare">
-                    <div class="image-caption">Fig 1.4 - Dashboard-ul de control: Catalog, Cereri Rezervare și Monitorizare Termene</div>
+                    <div class="image-caption">Fig 1.4 - Meniul principal cu opțiunile de navigare din bibliotecă</div>
                 </div>
+            </div>
+
+            <h3>4. Monitorizarea Împrumuturilor Active</h3>
+            <p>Acest ecran este dedicat exclusiv situației operative a utilizatorului logat. Formatul interfeței extrage dinamic din baza de date doar volumele luate în custodie de acesta. Pe lângă detaliile de identificare ale cărților, modulul integrează o logică de calcul temporal care afișează în timp real numărul de zile rămase până la termenul limită de returnare, ajutând la prevenirea penalizărilor printr-o evidență strictă.</p>
+            
+            <div class="image-gallery">
                 <div class="screenshot-container">
-                    <img src="PowerApp5.png" alt="Vizualizare Cărți Imprumutate">
-                    <div class="image-caption">Fig 1.5 - Interfața de urmărire a volumelor împrumutate și a timpului rămas până la restituire</div>
+                    <img src="PowerApp5.png" alt="Vizualizare Cărți Împrumutate">
+                    <div class="image-caption">Fig 1.5 - Interfața de urmărire a împrumuturilor active și a termenelor limită</div>
                 </div>
+            </div>
+
+            <h3>5. Catalogul de Cărți Disponibile</h3>
+            <p>Ultimul modul reprezintă fondul de carte complet al bibliotecii virtuale. Formatul ecranului este structurat sub forma unei galerii dinamice interactive ce listează volumele disponibile pentru împrumut. Interfața include instrumente de căutare contextuală și sortare, oferind utilizatorului posibilitatea de a răsfoi rapid stocul, de a verifica metadatele fiecărei cărți și de a iniția fluxul de rezervare direct din această vizualizare.</p>
+            
+            <div class="image-gallery">
                 <div class="screenshot-container">
-                    <img src="PowerApp6.jpg" alt="Catalogul de Cărți Disponibile">
-                    <div class="image-caption">Fig 1.6 - Tab-ul central al bibliotecii cu stocul complet și opțiunile de răsfoire</div>
+                    <img src="PowerApp6.jpg" alt="Catalog Cărți Disponibile">
+                    <div class="image-caption">Fig 1.6 - Tab-ul central cu formatul de afișare al tuturor cărților disponibile</div>
                 </div>
             </div>
         </section>
-    </main>
-
-</body>
-</html>
