@@ -171,9 +171,38 @@
             border: 1px solid #30363d;
         }
 
-        .controls-hint minicheck {
-            color: #58a6ff;
-            font-weight: bold;
+        /* Zona Butonului de Redirecționare */
+        .action-container {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .play-game-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #238636;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 28px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border-radius: 6px;
+            border: 1px solid rgba(240, 246, 252, 0.1);
+            box-shadow: 0 4px 12px rgba(35, 134, 54, 0.2);
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .play-game-btn:hover {
+            background-color: #2ea043;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 160, 67, 0.4);
+        }
+
+        .play-game-btn:active {
+            transform: translateY(0);
         }
 
         @media (max-width: 900px) {
@@ -237,6 +266,12 @@
                 </div>
                 <div class="controls-hint">
                     🎮 <strong>Control:</strong> Folosește tastele <code style="color:#58a6ff;">W</code> / <code style="color:#58a6ff;">S</code> pentru deplasare înainte/înapoi și <code style="color:#58a6ff;">A</code> / <code style="color:#58a6ff;">D</code> pentru rotația unghiului camerei.
+                </div>
+                
+                <div class="action-container">
+                    <a href="wolfenstein.html" target="_blank" class="play-game-btn">
+                        ⚔️ Joacă Jocul Complet
+                    </a>
                 </div>
             </div>
         </section>
@@ -320,12 +355,12 @@
             ctx2D.fillRect(0, 0, cvs2D.width, cvs2D.height);
 
             // Cer și Podea în Canvas 3D
-            ctx3D.fillStyle = '#87cefa'; // Albastru cer (din codul tău)
+            ctx3D.fillStyle = '#87cefa'; // Albastru cer
             ctx3D.fillRect(0, 0, cvs3D.width, cvs3D.height / 2);
             ctx3D.fillStyle = '#8b4513'; // Maro parchet
             ctx3D.fillRect(0, cvs3D.height / 2, cvs3D.width, cvs3D.height / 2);
 
-            // Desenare Minimapă 2D (Scalată să încapă în canvas-ul mic)
+            // Desenare Minimapă 2D
             let scaleX = cvs2D.width / (MAP[0].length * TILE_SIZE);
             let scaleY = cvs2D.height / (MAP.length * TILE_SIZE);
             let scale = Math.min(scaleX, scaleY);
@@ -374,7 +409,7 @@
 
                         let wallY = cvs3D.height / 2 - wallHeight / 2;
 
-                        // Efect de umbrire simplă bazat pe distanță
+                        // Efect de umbrire bazat pe distanță
                         let brightness = Math.max(20, 139 - (depth * 0.3));
                         ctx3D.fillStyle = `rgb(${brightness}, 0, 0)`;
                         ctx3D.fillRect(i * wallWidth, wallY, wallWidth + 1, wallHeight);
