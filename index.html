@@ -33,11 +33,15 @@
             border: 3px solid var(--accent); margin: 0 auto 20px;
             display: flex; align-items: center; justify-content: center;
             background-color: var(--card-bg); overflow: hidden;
-            color: var(--accent); font-size: 0.9em; text-align: center;
-            padding: 10px;
         }
 
-        .profile-pic-container img { width: 100%; height: 100%; object-fit: cover; }
+        /* Setările cheie pentru centrarea perfectă a feței */
+        .profile-pic-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            object-position: center 20%; /* Ajustează focalizarea mai sus pe axa verticală */
+        }
 
         h1 { color: var(--text-bright); margin-bottom: 5px; }
         .subtitle { color: var(--accent); font-weight: 500; margin-top: 0; }
@@ -87,7 +91,7 @@
 
     <div class="header">
         <div class="profile-pic-container">
-            <span>aici adaugi poza</span>
+            <img src="me.png" alt="Poza de profil a dezvoltatorului">
         </div>
         <h1>Catalog Proiecte</h1>
         <p class="subtitle">Software Developer | Student UTCB</p>
