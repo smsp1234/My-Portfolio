@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UE5 Prototyping - Detalii Proiect</title>
     <style>
-        :root { --bg: #0d1117; --card: #161b22; --accent: #58a6ff; --text: #c9d1d9; --bright: #f0f6fc; --border: #30363d; }
+        :root { --bg: #0d1117; --card: #161b22; --accent: #58a6ff; --text: #c9d1d9; --bright: #f0f6fc; --border: #30363d; --success: #2ea44f; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; max-width: 1000px; margin: 0 auto; }
         .back-btn { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; font-weight: bold; transition: 0.3s; }
         .back-btn:hover { transform: translateX(-5px); }
@@ -20,6 +20,36 @@
         p { margin-bottom: 15px; text-align: justify; }
         ul { margin-bottom: 15px; padding-left: 20px; }
         li { margin-bottom: 8px; }
+        
+        /* Stilizare specială pentru butonul de joc live */
+        .live-demo-btn { 
+            display: inline-flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            background: #2ea44f15;
+            color: var(--success); 
+            border: 2px solid var(--success); 
+            padding: 15px 35px; 
+            border-radius: 8px; 
+            font-size: 1.1em; 
+            font-weight: bold; 
+            text-decoration: none; 
+            transition: 0.3s all ease;
+            box-shadow: 0 4px 12px rgba(46, 164, 79, 0.1);
+        }
+        .live-demo-btn:hover { 
+            background: var(--success); 
+            color: #ffffff; 
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 164, 79, 0.3);
+        }
+        .live-demo-btn span {
+            font-size: 0.75em;
+            font-weight: normal;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
@@ -33,12 +63,13 @@
         <span class="tech-tag">Blueprints Visual Scripting</span>
         <span class="tech-tag">AI Perception</span>
         <span class="tech-tag">Lumen Lighting</span>
-        <span class="tech-tag">Character Animation</span>
+        <span class="tech-tag">Three.js / WebGL</span>
+        <span class="tech-tag">Web Audio API</span>
     </div>
 
     <div class="section">
         <h2>1. Player Character (Personajul Principal)</h2>
-        <p>Dezvoltarea personajului principal a presupus integrarea unui mesh solid și complex, configurat riguros din punct de vedere geometric pentru a susține deformații naturale în timpul mișcării. Personajul beneficiază de un sistem complet de animații care controlează stările de repaus (Idle), deplasare și acțiuni speciale. Arhitectura vizuală profită de tehnologia <strong>Lumen</strong> din Unreal Engine 5, oferind o iluminare globală dinamică excelentă și umbre realiste proiectate pe suprafața mediului de test, aspect crucial pentru fidelitatea vizuală a prototipului.</p>
+        <p>Dezvoltarea personajului principal a presupus integrarea unui mesh solid și complex, configurat riguros din punct de vedere geometric pentru a susține deformații naturale în timpul mișcării. Personajul beneficiază de un sistem complet de animații care controlează stările de repaus (Idle), deplasare și acțiuni speciale. Arhitectura vizuală profită de tehnologia <strong>Lumen</strong> din Unreal Engine 5, offering o iluminare globală dinamică excelentă și umbre realiste proiectate pe suprafața mediului de test, aspect crucial pentru fidelitatea vizuală a prototipului.</p>
         
         <div class="image-container">
             <img src="Ue5.1.png" alt="Player Character Render" class="project-img">
@@ -51,7 +82,7 @@
         <ul>
             <li><strong>Câmp Auditiv (Hearing Sense):</strong> Permite detectarea stimulilor sonori din mediu. Odată ce jucătorul declanșează un zgomot în raza de acoperire, inamicul reacționează instantaneu, întorcându-se către sursa sunetului pentru investigație.</li>
             <li><strong>Câmp Vizual (Sight Sense):</strong> Definește un con de vizibilitate în fața inamicului. Dacă jucătorul pătrunde în acest câmp, AI-ul trece din starea de patrulare în starea de luptă și începe să tragă asupra țintei.</li>
-            <li><strong>Logică de Urmărire Persistentă:</strong> În momentul în care jucătorul reușește să iasă din câmpul vizual (se ascunde după obstacole sau ziduri), inamicul nu abandonează căutarea imediat. Acesta continuă urmărirea activă pentru o perioadă de siguranță de încă 2-3 secunde. Dacă jucătorul nu revine la vedere în acest interval, starea de alertă scade, iar urmărirea încetă, AI-ul revenind la rutina inițială.</li>
+            <li><strong>Logică de Urmărire Persistentă:</strong> În momentul în care jucătorul reușește să iasă din câmpul vizual (se ascunde după obstacole sau ziduri), inamicul nu abandonează căutarea imediat. Acesta continuă urmărirea activă pentru o perioadă de siguranță de încă 2-3 secunde. Dacă jucătorul nu revine la vedere în acest interval, starea de alertă scade, iar urmărirea încetează, AI-ul revenind la rutina inițială.</li>
         </ul>
         
         <div class="image-container">
@@ -65,6 +96,19 @@
         
         <div class="image-container">
             <img src="Ue5.3.png" alt="Blueprints Movement Logic" class="project-img">
+        </div>
+    </div>
+
+    <div class="section" style="border-color: var(--success); background: linear-gradient(145deg, #161b22, #0d1117);">
+        <h2 style="color: var(--success); border-left-color: var(--success);">4. Prototip Interactiv 3D (Web Build Sandbox)</h2>
+        <p>Pentru a valida riguros mașina de stări a inteligenței artificiale (Patrol → Chase → Search), algoritmii de calcul pentru unghiul vizual și sistemul de Raycasting înainte de implementarea finală în Unreal Engine 5, am construit de la zero o replică funcțională 3D rulabilă direct în browser, sub numele de cod <strong>Roninstein</strong>.</p>
+        <p>Acest build independent utilizează <strong>Three.js (WebGL)</strong> pentru randarea mediului tridimensional la prima persoană și se remarcă prin integrarea unui sistem de <strong>sintetizare audio procedurală adaptivă (Web Audio API)</strong>. Ritmul și intensitatea liniei melodice se scalează în timp real în funcție de nivelul de alertă al inamicilor aflați în proximitate, demonstrând o validare completă de mecanică și arhitectură de gameplay direct pe web.</p>
+        
+        <div style="text-align: center; margin-top: 30px; margin-bottom: 10px;">
+            <a href="roninstein-enhanced.html" class="live-demo-btn">
+                🚀 Lansează Prototipul 3D (Live Demo)
+                <span>Apasă pentru gameplay instant (WASD + Mouse Look)</span>
+            </a>
         </div>
     </div>
 
