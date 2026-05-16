@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WOLF.JS — Raycaster</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1008;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Share Tech Mono', monospace;
+    color: #c8a46e;
+    overflow: hidden;
+  }
+  #title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    color: #c8a46e;
+    text-shadow: 0 0 20px #c8a46e88;
+    margin-bottom: 4px;
+  }
+  #subtitle {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    color: #c8a46e55;
+    margin-bottom: 8px;
+  }
+  #game-wrap {
+    position: relative;
+    border: 2px solid #5c3d1e;
+    box-shadow: 0 0 30px #00000088;
+  }
+  canvas { display: block; }
+  #overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px);
+  }
+  #hud {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 65px;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.85));
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    gap: 28px;
+  }
+  .hud-block { display: flex; flex-direction: column; gap: 3px; }
+  .hud-label { font-size: 0.5rem; letter-spacing: 0.2em; color: #c8a46e88; }
+  .bar-bg { width: 140px; height: 7px; background: #1a0d00; border: 1px solid #5c3d1e; }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, #8b2000, #e05000); transition: width 0.1s; }
+  .bar-fill.stamina { background: linear-gradient(90deg, #1a7a3a, #2dcc66); }
+  .hud-val { font-size: 0.65rem; color: #c8a46e; }
+  #level-display {
+    margin-left: auto;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    color: #c8a46e;
+    text-shadow: 0 0 8px #c8a46e66;
+  }
+  #minimap { position: absolute; top: 10px; right: 10px; opacity: 0.9; border: 1px solid #5c3d1e55; }
+  #message {
+    position: absolute;
+    top: 45%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #c8a46e;
+    text-shadow: 0 0 20px #c8a46e;
+    text-align: center;
+    pointer-events: none;
+    display: none;
+    line-height: 1.5;
+  }
+  #controls {
+    margin-top: 6px;
+    font-size: 0.52rem;
+    letter-spacing: 0.12em;
+    color: #c8a46e44;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div id="title">WOLF.JS</div>
+<div id="subtitle">CASTLE RAYCASTER · HTML5</div>
+
+<div id="game-wrap">
+  <canvas id="game" width="800" height="500"></canvas>
+  <canvas id="minimap" width="90" height="90"></canvas>
+  <div id="overlay"></div>
+  <div id="hud">
+    <div class="hud-block">
+      <div class="hud-label">HEALTH</div>
+      <div class="bar-bg"><div class="bar-fill" id="health-bar" style="width:100%"></div></div>
+      <div class="hud-val" id="health-val">100</div>
+    </div>
+    <div class="hud-block">
+      <div class="hud-label">STAMINA</div>
+      <div class="bar-bg"><div class="bar-fill stamina" id="stamina-bar" style="width:100%"></div></div>
+      <div class="hud-val" id="stamina-val">100</div>
+    </div>
+    <div class="hud-block">
+      <div class="hud-label">ENEMIES</div>
+      <div class="hud-val" id="enemy-count">0</div>
+    </div>
+    <div id="level-display">LVL <span id="level-num">1</span></div>
+  </div>
+  <div id="message"></div>
+</div>
+
+<div id="controls">W/S — MOVE &nbsp;·&nbsp; A/D — ROTATE &nbsp;·&nbsp; SHIFT — SPRINT &nbsp;·&nbsp; SPACE — SHOOT</div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const mmCanvas = document.getElementById('minimap');
+const mmCtx = mmCanvas.getContext('2d');
+
+const W = canvas.width, H = canvas.height;
+const TILE = 50;
+const FOV = Math.PI / 3;
+const NUM_RAYS = 240;
+const MAX_DEPTH = 900;
+const MOVE_SPEED = 2.0;
+const SPRINT_SPEED = 3.5;
+const ROTATE_SPEED = 0.04;
+const BULLET_DAMAGE = 25;
+const SHOOT_RANGE = 350;
+const HUD_H = 65;
+const VIEW_H = H - HUD_H;
+
+// ─── PRE-RENDER BRICK TEXTURE ────────────────────────────────────────────────
+const BRICK_W = 64, BRICK_H = 64;
+const brickCanvas = document.createElement('canvas');
+brickCanvas.width = BRICK_W; brickCanvas.height = BRICK_H;
+const bc = brickCanvas.getContext('2d');
+
+(function makeBrickTexture() {
+  // Mortar
+  bc.fillStyle = '#3a2010';
+  bc.fillRect(0, 0, BRICK_W, BRICK_H);
+  const bRows = 4, bCols = 2;
+  const bW = BRICK_W / bCols, bH = BRICK_H / bRows;
+  for (let row = 0; row < bRows; row++) {
+    const offset = (row % 2) * (bW / 2);
+    for (let col = -1; col <= bCols; col++) {
+      const bx = col * bW + offset + 1.5;
+      const by = row * bH + 1.5;
+      const bw = bW - 3, bh = bH - 3;
+      // Variation
+      const v = (Math.sin(row*7+col*13)*0.12 + Math.cos(row*3+col*19)*0.08);
+      const r = Math.min(255, Math.floor(158 + v*60));
+      const g = Math.min(255, Math.floor(82 + v*30));
+      const b = Math.min(255, Math.floor(52 + v*20));
+      bc.fillStyle = `rgb(${r},${g},${b})`;
+      bc.fillRect(bx, by, bw, bh);
+      // Highlight
+      bc.fillStyle = 'rgba(255,200,160,0.13)';
+      bc.fillRect(bx, by, bw, 2);
+      bc.fillRect(bx, by, 2, bh);
+      // Shadow
+      bc.fillStyle = 'rgba(0,0,0,0.28)';
+      bc.fillRect(bx, by+bh-2, bw, 2);
+      bc.fillRect(bx+bw-2, by, 2, bh);
+      // Noise
+      for (let d = 0; d < 6; d++) {
+        const nx = bx + ((row*31+col*17+d*7) % Math.max(1,bw));
+        const ny = by + ((row*19+col*23+d*11) % Math.max(1,bh));
+        bc.fillStyle = `rgba(0,0,0,${0.05+(d%3)*0.04})`;
+        bc.fillRect(nx, ny, 2, 2);
+      }
+    }
+  }
+})();
+
+// ─── DECORATIONS GENERATOR ───────────────────────────────────────────────────
+function generateDecorations(map) {
+  const decs = [];
+  const rows = map.length, cols = map[0].length;
+  for (let y = 1; y < rows-1; y++) {
+    for (let x = 1; x < cols-1; x++) {
+      if (map[y][x] !== 0) continue;
+      const seed = x * 17 + y * 31;
+      if (map[y-1][x] === 1 && seed % 7 === 0)
+        decs.push({ wx: x*TILE+TILE/2, wy: (y-1)*TILE+TILE, type: seed%3===0?'torch':'painting' });
+      if (map[y+1][x] === 1 && (seed*3)%7 === 0)
+        decs.push({ wx: x*TILE+TILE/2, wy: (y+1)*TILE, type: (seed*3)%5===0?'torch':'painting' });
+      if (map[y][x+1] === 1 && (seed*5)%9 === 0)
+        decs.push({ wx: (x+1)*TILE, wy: y*TILE+TILE/2, type: (seed*5)%4===0?'torch':'painting' });
+      if (map[y][x-1] === 1 && (seed*7)%11 === 0)
+        decs.push({ wx: x*TILE, wy: y*TILE+TILE/2, type: (seed*7)%6===0?'torch':'painting' });
+    }
+  }
+  return decs;
+}
+
+// ─── LEVELS ──────────────────────────────────────────────────────────────────
+// All levels verified: startX/startY cells are 0, and reachable corridors exist.
+const LEVELS = [
+  {
+    // Level 1 — open maze
+    map: [
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,1,0,1,1,0,1,0,1,1,0,1,0,1],
+      [1,0,1,0,0,0,0,1,0,0,0,0,1,0,1],
+      [1,0,0,0,1,0,0,0,0,0,1,0,0,0,1],
+      [1,0,1,0,1,0,1,1,1,0,1,0,1,0,1],
+      [1,0,1,0,0,0,0,0,0,0,0,0,1,0,1],
+      [1,0,0,0,1,0,1,0,1,0,1,0,0,0,1],
+      [1,0,1,0,0,0,0,0,0,0,0,0,1,0,1],
+      [1,0,1,0,1,1,0,1,0,1,1,0,1,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    ],
+    enemies: [{x:375,y:275,hp:100},{x:575,y:475,hp:100}],
+    startX: 75, startY: 75,
+  },
+  {
+    // Level 2 — longer corridors, completely open from (1,1)
+    map: [
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,1,1,0,1,0,1,1,0,1,0,1,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,1,0,1,1,0,0,0,1,1,0,1,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,1,0,0,1,1,1,1,1,0,0,1,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,1,1,0,0,1,0,0,1,0,1,1,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,1,0,1,0,1,1,0,1,0,1,0,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,1,0,1,1,0,1,0,0,1,0,1,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    ],
+    enemies: [{x:375,y:175,hp:100},{x:575,y:375,hp:100},{x:225,y:575,hp:100}],
+    startX: 75, startY: 75,
+  },
+  {
+    // Level 3 — tighter maze
+    map: [
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [1,0,0,1,0,0,0,1,0,0,0,1,0,0,1],
+      [1,0,1,1,0,1,0,0,0,1,0,0,0,1,1],
+      [1,0,0,0,0,1,0,1,0,0,0,1,0,0,1],
+      [1,1,0,1,0,0,0,0,0,0,1,0,0,1,1],
+      [1,0,0,1,0,1,1,0,1,0,0,0,0,0,1],
+      [1,0,1,0,0,0,0,0,0,0,1,0,1,0,1],
+      [1,0,0,0,1,0,1,0,1,0,0,0,0,0,1],
+      [1,0,1,0,0,0,0,1,0,0,1,0,1,0,1],
+      [1,0,0,1,0,1,0,0,0,1,0,0,0,0,1],
+      [1,1,0,0,0,0,0,1,0,0,0,1,0,1,1],
+      [1,0,0,1,0,0,1,0,0,1,0,0,0,0,1],
+      [1,0,1,0,0,1,0,0,1,0,0,1,0,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    ],
+    // startX=75,startY=75 → map[1][1]=0 ✓, but map[1][0]=1 and [0][1]=1, fine.
+    // Verify map[1][1]=0: row1=[1,0,0,1,…] → col1=0 ✓
+    enemies: [{x:325,y:325,hp:100},{x:575,y:225,hp:100},{x:425,y:575,hp:100}],
+    startX: 75, startY: 75,
+  },
+  {
+    // Level 4 — Boss arena: big open room with pillar columns
+    map: [
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,0,1,0,0,0,0,0,0,0,1,0,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,0,1,0,0,0,0,0,0,0,1,0,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    ],
+    enemies: [{x:575,y:275,hp:400,isBoss:true}],
+    startX: 75, startY: 75,
+  },
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentLevel = 0;
+let MAP, enemies, decorations;
+let px, py, pAngle;
+let health = 100, stamina = 100;
+let keys = {};
+let shootCooldown = 0;
+let messageTimer = 0;
+let gameOver = false, gameWon = false;
+let flashTimer = 0;
+let torchPhase = 0;
+
+function loadLevel(idx) {
+  const lvl = LEVELS[idx];
+  MAP = lvl.map;
+  enemies = lvl.enemies.map(e => ({...e, maxHp: e.hp}));
+  decorations = generateDecorations(MAP);
+  px = lvl.startX; py = lvl.startY; pAngle = 0;
+  document.getElementById('level-num').textContent = idx + 1;
+  showMessage(idx === 3 ? '⚠  BOSS  LEVEL  ⚠' : `LEVEL  ${idx + 1}`, 2200);
+}
+
+function showMessage(txt, dur) {
+  const el = document.getElementById('message');
+  el.textContent = txt;
+  el.style.display = 'block';
+  messageTimer = dur;
+}
+
+loadLevel(0);
+
+document.addEventListener('keydown', e => {
+  keys[e.code] = true;
+  if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
+});
+document.addEventListener('keyup', e => { keys[e.code] = false; });
+
+// ─── MAP HELPERS ─────────────────────────────────────────────────────────────
+function wallAt(x, y) {
+  const mx = Math.floor(x / TILE), my = Math.floor(y / TILE);
+  if (my < 0 || my >= MAP.length || mx < 0 || mx >= MAP[0].length) return true;
+  return MAP[my][mx] === 1;
+}
+
+// ─── DDA RAYCASTING ──────────────────────────────────────────────────────────
+function castRayDDA(angle) {
+  const cosA = Math.cos(angle), sinA = Math.sin(angle);
+  let mapX = Math.floor(px / TILE), mapY = Math.floor(py / TILE);
+  const deltaDistX = Math.abs(1 / (cosA || 1e-10));
+  const deltaDistY = Math.abs(1 / (sinA || 1e-10));
+  let stepX, stepY, sideDistX, sideDistY;
+
+  if (cosA < 0) { stepX=-1; sideDistX=(px/TILE-mapX)*deltaDistX; }
+  else           { stepX= 1; sideDistX=(mapX+1-px/TILE)*deltaDistX; }
+  if (sinA < 0)  { stepY=-1; sideDistY=(py/TILE-mapY)*deltaDistY; }
+  else           { stepY= 1; sideDistY=(mapY+1-py/TILE)*deltaDistY; }
+
+  let side = 0;
+  for (let i = 0; i < 80; i++) {
+    if (sideDistX < sideDistY) { sideDistX+=deltaDistX; mapX+=stepX; side=0; }
+    else                        { sideDistY+=deltaDistY; mapY+=stepY; side=1; }
+    if (mapY<0||mapY>=MAP.length||mapX<0||mapX>=MAP[0].length) break;
+    if (MAP[mapY][mapX] === 1) {
+      const perpDist = side===0
+        ? (mapX - px/TILE + (1-stepX)/2) / cosA * TILE
+        : (mapY - py/TILE + (1-stepY)/2) / sinA * TILE;
+      let wallX = side===0 ? (py+perpDist*sinA)/TILE : (px+perpDist*cosA)/TILE;
+      wallX -= Math.floor(wallX);
+      return { dist: Math.abs(perpDist), side, wallX };
+    }
+  }
+  return { dist: MAX_DEPTH, side: 0, wallX: 0 };
+}
+
+// ─── DRAW SCENE ──────────────────────────────────────────────────────────────
+function drawScene() {
+  // Sky — bright daytime blue
+  const sky = ctx.createLinearGradient(0, 0, 0, VIEW_H/2);
+  sky.addColorStop(0,   '#2a6db5');
+  sky.addColorStop(0.65,'#6daef0');
+  sky.addColorStop(1,   '#a2d0f8');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, W, VIEW_H/2);
+
+  // Clouds
+  ctx.fillStyle = 'rgba(255,255,255,0.65)';
+  [[110,28,52,20],[290,18,65,22],[480,32,48,17],[640,14,58,20],[175,42,32,13]].forEach(([cx,cy,cw,ch])=>{
+    ctx.beginPath(); ctx.ellipse(cx,cy,cw,ch,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(cx-18,cy+4,cw*0.55,ch*0.65,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(cx+22,cy+6,cw*0.48,ch*0.58,0,0,Math.PI*2); ctx.fill();
+  });
+
+  // Horizon haze
+  const haze = ctx.createLinearGradient(0, VIEW_H/2-18, 0, VIEW_H/2);
+  haze.addColorStop(0,'rgba(162,208,248,0)');
+  haze.addColorStop(1,'rgba(200,228,255,0.45)');
+  ctx.fillStyle = haze;
+  ctx.fillRect(0, VIEW_H/2-18, W, 18);
+
+  // Floor — warm wood tone
+  const floorGrad = ctx.createLinearGradient(0, VIEW_H/2, 0, VIEW_H);
+  floorGrad.addColorStop(0,   '#3a1a08');
+  floorGrad.addColorStop(0.4, '#5c2e10');
+  floorGrad.addColorStop(1,   '#7a4018');
+  ctx.fillStyle = floorGrad;
+  ctx.fillRect(0, VIEW_H/2, W, VIEW_H/2);
+
+  // Floor plank perspective lines
+  ctx.save();
+  const vx = W/2, vy = VIEW_H/2;
+  ctx.strokeStyle = 'rgba(20,8,2,0.3)';
+  ctx.lineWidth = 0.7;
+  for (let i = 0; i <= 12; i++) {
+    const bx = (i/12)*W;
+    ctx.beginPath(); ctx.moveTo(vx,vy); ctx.lineTo(bx,VIEW_H); ctx.stroke();
+  }
+  for (let d = 1; d < 14; d++) {
+    const fy = vy + (VIEW_H-vy)*(1-1/d);
+    ctx.beginPath(); ctx.moveTo(0,fy); ctx.lineTo(W,fy); ctx.stroke();
+  }
+  ctx.restore();
+
+  // ─── WALLS ───────────────────────────────────────────────────────────────
+  const DELTA = FOV / NUM_RAYS;
+  const zBuffer = new Float32Array(NUM_RAYS);
+
+  for (let i = 0; i < NUM_RAYS; i++) {
+    const rayAngle = pAngle - FOV/2 + i*DELTA;
+    const hit = castRayDDA(rayAngle);
+    const corrected = hit.dist * Math.cos(rayAngle - pAngle);
+    zBuffer[i] = corrected;
+
+    const wallH = Math.min(VIEW_H*4, (TILE*VIEW_H) / Math.max(1, corrected));
+    const wallY = VIEW_H/2 - wallH/2;
+    const sliceW = W / NUM_RAYS;
+    const screenX = i * sliceW;
+
+    // Distance + side shading
+    const distShade = Math.max(0.1, Math.min(1, 1 - corrected/380));
+    const sideShade = hit.side === 1 ? 0.68 : 1.0;
+    const shade = distShade * sideShade;
+
+    // Brick texture slice
+    const texU = Math.floor(hit.wallX * BRICK_W) % BRICK_W;
+    ctx.drawImage(brickCanvas, texU, 0, 1, BRICK_H, screenX, wallY, sliceW+1, wallH);
+
+    // Darkness overlay
+    if (shade < 0.999) {
+      ctx.fillStyle = `rgba(0,0,0,${1-shade})`;
+      ctx.fillRect(screenX, wallY, sliceW+1, wallH);
+    }
+  }
+
+  // ─── SPRITES (decorations + enemies) ─────────────────────────────────────
+  torchPhase += 0.09;
+
+  const allSprites = [
+    ...decorations.map(d => ({...d, isDecor:true, _x:d.wx, _y:d.wy})),
+    ...enemies.map(e => ({...e, isEnemy:true, _x:e.x, _y:e.y})),
+  ].sort((a,b) => {
+    return Math.hypot(b._x-px, b._y-py) - Math.hypot(a._x-px, a._y-py);
+  });
+
+  for (const sp of allSprites) {
+    const dx = sp._x-px, dy = sp._y-py;
+    const dist = Math.sqrt(dx*dx+dy*dy);
+    if (dist < 8) continue;
+    let a = Math.atan2(dy,dx) - pAngle;
+    while (a > Math.PI) a -= 2*Math.PI;
+    while (a < -Math.PI) a += 2*Math.PI;
+    if (Math.abs(a) > FOV*0.75) continue;
+
+    const screenX = W/2 + Math.tan(a)*(W/2)/Math.tan(FOV/2);
+    const ri = Math.max(0, Math.min(NUM_RAYS-1, Math.floor((a/FOV+0.5)*NUM_RAYS)));
+    if (dist > zBuffer[ri]+5) continue;
+
+    const spriteH = Math.min(VIEW_H*2, (TILE*VIEW_H)/dist);
+    const spriteY = VIEW_H/2 - spriteH/2;
+
+    if (sp.isDecor) drawDecoration(sp, screenX, spriteY, spriteH, dist);
+    else if (sp.isEnemy) drawEnemy(sp, screenX, spriteY, spriteH, dist);
+  }
+
+  // ─── CROSSHAIR ───────────────────────────────────────────────────────────
+  const cx = W/2, cy = VIEW_H/2;
+  ctx.strokeStyle = 'rgba(255,220,150,0.9)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(cx-14,cy); ctx.lineTo(cx+14,cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx,cy-14); ctx.lineTo(cx,cy+14); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,220,150,0.45)';
+  ctx.beginPath(); ctx.arc(cx,cy,6,0,Math.PI*2); ctx.stroke();
+
+  // ─── SHOOT FLASH ─────────────────────────────────────────────────────────
+  if (flashTimer > 0) {
+    ctx.fillStyle = `rgba(255,180,50,${(flashTimer/120)*0.15})`;
+    ctx.fillRect(0, 0, W, VIEW_H);
+  }
+}
+
+function drawDecoration(dec, screenX, spriteY, spriteH, dist) {
+  const shade = Math.min(1, 130/dist);
+  const spriteW = spriteH;
+
+  if (dec.type === 'torch') {
+    const tw = spriteW*0.15, th = spriteH*0.3;
+    const tx = screenX - tw/2, ty = spriteY + spriteH*0.38;
+
+    // Bracket/handle
+    ctx.fillStyle = `rgba(${Math.floor(70*shade)},${Math.floor(45*shade)},${Math.floor(18*shade)},1)`;
+    ctx.fillRect(tx, ty, tw, th);
+
+    // Flame animation
+    const flicker = Math.sin(torchPhase + dec.wx*0.07)*0.28 + 0.72;
+    const fh = spriteH*0.2*flicker;
+    const fw = spriteW*0.12*flicker;
+    const fy = ty - fh;
+
+    // Outer glow
+    if (dist < 160) {
+      const g = ctx.createRadialGradient(screenX, ty, 0, screenX, ty, spriteW*2);
+      g.addColorStop(0, `rgba(255,140,0,${(1-dist/160)*0.18*shade})`);
+      g.addColorStop(1, 'rgba(255,80,0,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(screenX-spriteW*2, ty-spriteH*0.6, spriteW*4, spriteH*1.2);
+    }
+    // Flame body
+    ctx.fillStyle = `rgba(255,${Math.floor(100+flicker*80)},0,${0.75*shade})`;
+    ctx.beginPath(); ctx.ellipse(screenX, fy+fh*0.55, fw, fh, 0, 0, Math.PI*2); ctx.fill();
+    // Flame core
+    ctx.fillStyle = `rgba(255,240,120,${0.85*shade})`;
+    ctx.beginPath(); ctx.ellipse(screenX, fy+fh*0.65, fw*0.45, fh*0.55, 0, 0, Math.PI*2); ctx.fill();
+
+  } else {
+    // Painting
+    const pw = spriteW*0.42, ph = spriteH*0.32;
+    const px2 = screenX - pw/2, py2 = spriteY + spriteH*0.3;
+
+    // Gold frame
+    ctx.fillStyle = `rgba(${Math.floor(150*shade)},${Math.floor(115*shade)},${Math.floor(18*shade)},1)`;
+    ctx.fillRect(px2-3, py2-3, pw+6, ph+6);
+
+    const ip = Math.floor((dec.wx/TILE + dec.wy/TILE)) % 3;
+    if (ip === 0) {
+      // Landscape: sky + ground
+      ctx.fillStyle = `rgba(${Math.floor(70*shade)},${Math.floor(95*shade)},${Math.floor(145*shade)},1)`;
+      ctx.fillRect(px2, py2, pw, ph*0.55);
+      ctx.fillStyle = `rgba(${Math.floor(45*shade)},${Math.floor(70*shade)},${Math.floor(35*shade)},1)`;
+      ctx.fillRect(px2, py2+ph*0.55, pw, ph*0.45);
+      // Tree
+      ctx.fillStyle = `rgba(${Math.floor(30*shade)},${Math.floor(50*shade)},${Math.floor(20*shade)},1)`;
+      ctx.fillRect(px2+pw*0.6, py2+ph*0.2, pw*0.07, ph*0.35);
+      ctx.beginPath(); ctx.arc(px2+pw*0.63, py2+ph*0.15, pw*0.12, 0, Math.PI*2); ctx.fill();
+    } else if (ip === 1) {
+      // Dark portrait
+      ctx.fillStyle = `rgba(${Math.floor(25*shade)},${Math.floor(18*shade)},${Math.floor(10*shade)},1)`;
+      ctx.fillRect(px2, py2, pw, ph);
+      ctx.fillStyle = `rgba(${Math.floor(175*shade)},${Math.floor(125*shade)},${Math.floor(85*shade)},1)`;
+      ctx.beginPath(); ctx.ellipse(px2+pw/2, py2+ph*0.42, pw*0.18, ph*0.28, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = `rgba(${Math.floor(100*shade)},${Math.floor(70*shade)},${Math.floor(40*shade)},1)`;
+      ctx.fillRect(px2+pw*0.3, py2+ph*0.65, pw*0.4, ph*0.35);
+    } else {
+      // Cross/crest
+      ctx.fillStyle = `rgba(${Math.floor(18*shade)},${Math.floor(12*shade)},${Math.floor(28*shade)},1)`;
+      ctx.fillRect(px2, py2, pw, ph);
+      ctx.fillStyle = `rgba(${Math.floor(195*shade)},${Math.floor(165*shade)},${Math.floor(75*shade)},1)`;
+      ctx.fillRect(px2+pw*0.43, py2+ph*0.08, pw*0.14, ph*0.84);
+      ctx.fillRect(px2+pw*0.12, py2+ph*0.32, pw*0.76, ph*0.16);
+    }
+  }
+}
+
+function drawEnemy(e, screenX, spriteY, spriteH, dist) {
+  const shade = Math.min(1, 130/dist);
+  const spriteW = spriteH;
+  const bx = screenX - spriteW/2;
+
+  if (e.isBoss) {
+    const bodyH = spriteH*0.52;
+    const bodyY = spriteY + spriteH*0.3;
+    // Robes
+    ctx.fillStyle = `rgba(${Math.floor(55*shade)},0,${Math.floor(75*shade)},1)`;
+    ctx.fillRect(bx+spriteW*0.12, bodyY, spriteW*0.76, bodyH);
+    // Shoulders
+    ctx.fillStyle = `rgba(${Math.floor(95*shade)},${Math.floor(75*shade)},0,1)`;
+    ctx.fillRect(bx, bodyY, spriteW*0.22, bodyH*0.38);
+    ctx.fillRect(bx+spriteW*0.78, bodyY, spriteW*0.22, bodyH*0.38);
+    // Helm
+    const hs = spriteW*0.36;
+    ctx.fillStyle = `rgba(${Math.floor(28*shade)},0,${Math.floor(38*shade)},1)`;
+    ctx.fillRect(bx+spriteW/2-hs/2, spriteY+spriteH*0.06, hs, hs*1.05);
+    // Eyes
+    if (spriteH > 20) {
+      const ew = Math.max(2, spriteW*0.075);
+      const glow = `rgba(255,0,0,${shade})`;
+      ctx.fillStyle = glow;
+      ctx.beginPath(); ctx.arc(bx+spriteW*0.37, spriteY+spriteH*0.145, ew, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(bx+spriteW*0.63, spriteY+spriteH*0.145, ew, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = `rgba(255,0,0,0.18)`;
+      ctx.beginPath(); ctx.arc(bx+spriteW*0.37, spriteY+spriteH*0.145, ew*3.5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(bx+spriteW*0.63, spriteY+spriteH*0.145, ew*3.5, 0, Math.PI*2); ctx.fill();
+    }
+    // Weapon
+    ctx.fillStyle = `rgba(180,0,0,${0.45*shade})`;
+    ctx.fillRect(bx+spriteW*0.82, bodyY+bodyH*0.15, spriteW*0.1, bodyH*0.75);
+  } else {
+    const bodyH = spriteH*0.48;
+    const bodyY = spriteY + spriteH*0.33;
+    // Legs
+    ctx.fillStyle = `rgba(${Math.floor(55*shade)},${Math.floor(45*shade)},${Math.floor(35*shade)},1)`;
+    ctx.fillRect(bx+spriteW*0.26, bodyY+bodyH, spriteW*0.18, spriteH*0.17);
+    ctx.fillRect(bx+spriteW*0.56, bodyY+bodyH, spriteW*0.18, spriteH*0.17);
+    // Uniform body
+    ctx.fillStyle = `rgba(${Math.floor(95*shade)},${Math.floor(78*shade)},${Math.floor(58*shade)},1)`;
+    ctx.fillRect(bx+spriteW*0.22, bodyY, spriteW*0.56, bodyH);
+    // Belt
+    ctx.fillStyle = `rgba(${Math.floor(45*shade)},${Math.floor(32*shade)},${Math.floor(12*shade)},1)`;
+    ctx.fillRect(bx+spriteW*0.22, bodyY+bodyH*0.63, spriteW*0.56, bodyH*0.1);
+    // Head
+    const hs = spriteW*0.3;
+    ctx.fillStyle = `rgba(${Math.floor(208*shade)},${Math.floor(162*shade)},${Math.floor(118*shade)},1)`;
+    ctx.fillRect(bx+spriteW/2-hs/2, spriteY+spriteH*0.09, hs, hs);
+    // Helmet
+    ctx.fillStyle = `rgba(${Math.floor(55*shade)},${Math.floor(50*shade)},${Math.floor(40*shade)},1)`;
+    ctx.fillRect(bx+spriteW/2-hs/2-2, spriteY+spriteH*0.07, hs+4, hs*0.45);
+    // Eyes
+    if (spriteH > 28) {
+      const ew = Math.max(1.5, spriteW*0.055);
+      ctx.fillStyle = '#111';
+      ctx.fillRect(bx+spriteW*0.385, spriteY+spriteH*0.175, ew, ew);
+      ctx.fillRect(bx+spriteW*0.585, spriteY+spriteH*0.175, ew, ew);
+    }
+    // Gun
+    ctx.fillStyle = `rgba(${Math.floor(35*shade)},${Math.floor(30*shade)},${Math.floor(25*shade)},1)`;
+    ctx.fillRect(bx+spriteW*0.72, bodyY+bodyH*0.28, spriteW*0.17, bodyH*0.11);
+    ctx.fillRect(bx+spriteW*0.72, bodyY+bodyH*0.28, spriteW*0.3, bodyH*0.055);
+  }
+
+  // Health bar
+  if (spriteH > 16) {
+    const bw = spriteW*0.78, hpR = e.hp/e.maxHp;
+    ctx.fillStyle = 'rgba(0,0,0,0.65)';
+    ctx.fillRect(screenX-bw/2, spriteY-10, bw, 5);
+    ctx.fillStyle = hpR>0.5 ? '#2dcc66' : hpR>0.25 ? '#f0c020' : '#e03000';
+    ctx.fillRect(screenX-bw/2, spriteY-10, bw*hpR, 5);
+  }
+}
+
+// ─── MINIMAP ─────────────────────────────────────────────────────────────────
+function drawMinimap() {
+  const scale = 5;
+  const rows = MAP.length, cols = MAP[0].length;
+  mmCanvas.width = cols*scale; mmCanvas.height = rows*scale;
+  mmCtx.fillStyle = 'rgba(0,0,0,0.72)';
+  mmCtx.fillRect(0, 0, mmCanvas.width, mmCanvas.height);
+
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+    if (MAP[y][x]===1) {
+      mmCtx.fillStyle = '#7a4a20';
+      mmCtx.fillRect(x*scale, y*scale, scale, scale);
+      mmCtx.fillStyle = 'rgba(255,200,120,0.13)';
+      mmCtx.fillRect(x*scale, y*scale, scale, 1);
+    } else {
+      mmCtx.fillStyle = '#18100a';
+      mmCtx.fillRect(x*scale, y*scale, scale, scale);
+    }
+  }
+
+  for (const e of enemies) {
+    const ex=(e.x/TILE)*scale, ey=(e.y/TILE)*scale;
+    mmCtx.fillStyle = e.isBoss ? '#cc00ff' : '#ff3300';
+    mmCtx.beginPath(); mmCtx.arc(ex,ey,2.5,0,Math.PI*2); mmCtx.fill();
+  }
+
+  const pmx=(px/TILE)*scale, pmy=(py/TILE)*scale;
+  mmCtx.fillStyle='#ffdd88';
+  mmCtx.beginPath(); mmCtx.arc(pmx,pmy,3,0,Math.PI*2); mmCtx.fill();
+  mmCtx.strokeStyle='#ffdd88'; mmCtx.lineWidth=1.5;
+  mmCtx.beginPath(); mmCtx.moveTo(pmx,pmy); mmCtx.lineTo(pmx+Math.cos(pAngle)*10, pmy+Math.sin(pAngle)*10); mmCtx.stroke();
+}
+
+// ─── HUD ─────────────────────────────────────────────────────────────────────
+function updateHUD() {
+  document.getElementById('health-bar').style.width = Math.max(0,health)+'%';
+  document.getElementById('stamina-bar').style.width = Math.max(0,stamina)+'%';
+  document.getElementById('health-val').textContent = Math.max(0,Math.floor(health));
+  document.getElementById('stamina-val').textContent = Math.floor(stamina);
+  document.getElementById('enemy-count').textContent = enemies.length;
+}
+
+// ─── ENEMY AI ────────────────────────────────────────────────────────────────
+function moveEnemy(e) {
+  const dx=px-e.x, dy=py-e.y, dist=Math.hypot(dx,dy);
+  if (dist<1) return;
+  const speed = e.isBoss ? 0.55 : 0.32;
+  const nx=e.x+(dx/dist)*speed, ny=e.y+(dy/dist)*speed;
+  if (!wallAt(nx,e.y)) e.x=nx;
+  if (!wallAt(e.x,ny)) e.y=ny;
+}
+
+// ─── MAIN LOOP ────────────────────────────────────────────────────────────────
+let lastTime = performance.now();
+
+function update(now) {
+  const dt = Math.min(50, now - lastTime);
+  lastTime = now;
+
+  if (!gameOver && !gameWon) {
+    if (messageTimer>0) { messageTimer-=dt; if(messageTimer<=0) document.getElementById('message').style.display='none'; }
+    if (flashTimer>0) flashTimer-=dt;
+    if (shootCooldown>0) shootCooldown-=dt;
+
+    // Shoot
+    if (keys['Space'] && shootCooldown<=0) {
+      shootCooldown=280; flashTimer=120;
+      let hit=null, closest=Infinity;
+      for (const e of enemies) {
+        const dx=e.x-px, dy=e.y-py, dist=Math.hypot(dx,dy);
+        let a=Math.atan2(dy,dx)-pAngle;
+        while(a>Math.PI) a-=2*Math.PI; while(a<-Math.PI) a+=2*Math.PI;
+        if (Math.abs(a)<FOV/3.5 && dist<SHOOT_RANGE && dist<closest) { hit=e; closest=dist; }
+      }
+      if (hit) { hit.hp-=BULLET_DAMAGE; if(hit.hp<=0) enemies=enemies.filter(e=>e!==hit); }
+    }
+
+    // Player movement
+    const sprint = keys['ShiftLeft']||keys['ShiftRight'];
+    const speed = sprint&&stamina>0 ? SPRINT_SPEED : MOVE_SPEED;
+    if (sprint&&(keys['KeyW']||keys['KeyS'])) stamina=Math.max(0,stamina-0.12*(dt/16));
+    else stamina=Math.min(100,stamina+0.06*(dt/16));
+
+    if (keys['KeyW']) { const nx=px+Math.cos(pAngle)*speed, ny=py+Math.sin(pAngle)*speed; if(!wallAt(nx,py)) px=nx; if(!wallAt(px,ny)) py=ny; }
+    if (keys['KeyS']) { const nx=px-Math.cos(pAngle)*speed, ny=py-Math.sin(pAngle)*speed; if(!wallAt(nx,py)) px=nx; if(!wallAt(px,ny)) py=ny; }
+    if (keys['KeyA']) pAngle-=ROTATE_SPEED;
+    if (keys['KeyD']) pAngle+=ROTATE_SPEED;
+
+    // Enemies
+    for (const e of enemies) {
+      moveEnemy(e);
+      if (Math.hypot(e.x-px,e.y-py)<34) { health-=(e.isBoss?0.14:0.05)*(dt/16); flashTimer=90; }
+    }
+
+    if (health<=0) {
+      health=0; gameOver=true;
+      showMessage('YOU DIED\n\nREFRESH TO RESTART', 999999);
+      document.getElementById('message').style.whiteSpace='pre';
+    }
+
+    if (!gameOver && enemies.length===0) {
+      if (currentLevel+1>=LEVELS.length) {
+        gameWon=true;
+        showMessage('🏆  VICTORY!\nALL LEVELS CLEARED', 999999);
+        document.getElementById('message').style.whiteSpace='pre';
+      } else {
+        currentLevel++; loadLevel(currentLevel); health=Math.min(100,health+30);
+      }
+    }
+  }
+
+  drawScene();
+  drawMinimap();
+  updateHUD();
+  requestAnimationFrame(update);
+}
+
+requestAnimationFrame(update);
+</script>
+</body>
+</html>
