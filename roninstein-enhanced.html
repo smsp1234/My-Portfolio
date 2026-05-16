@@ -342,7 +342,6 @@ const petalTex = makeCanvasTex(32, 32, (ctx) => {
 
 // ─── PROCEDURAL MAP GENERATION ──────────────────────────────
 function generateProceduralMap(width, height) {
-  // BSP-style fortress layout
   const map = Array.from({length: height}, () => Array(width).fill(1));
 
   function carveRoom(x1, y1, x2, y2) {
@@ -357,7 +356,6 @@ function generateProceduralMap(width, height) {
     while (cy !== y2) { if (cx >= 0 && cx < width && cy >= 0 && cy < height) map[cy][cx] = 0; cy += cy < y2 ? 1 : -1; }
   }
 
-  // Rooms
   const rooms = [];
   const attempts = 35;
   for (let i = 0; i < attempts; i++) {
@@ -365,39 +363,43 @@ function generateProceduralMap(width, height) {
     const rh = 3 + Math.floor(Math.random() * 4);
     const rx = 1 + Math.floor(Math.random() * (width - rw - 2));
     const ry = 1 + Math.floor(Math.random() * (height - rh - 2));
-    // Overlap check
+    
     let ok = true;
     for (const r of rooms) {
       if (rx < r.x2+2 && rx+rw > r.x1-2 && ry < r.y2+2 && ry+rh > r.y1-2) { ok = false; break; }
     }
-    if (ok) { carveRoom(rx, ry, rx+rw-1, ry+rh-1); rooms.push({x1:rx,y1:ry,x2:rx+rw-1,y2:ry+rh-1,cx:rx+Math.floor(rw/2),cy:ry+Math.floor(rh/2)}); }
+    if (ok) { 
+      carveRoom(rx, ry, rx+rw-1, ry+rh-1); 
+      rooms.push({x1:rx,y1:ry,x2:rx+rw-1,y2:ry+rh-1,cx:rx+Math.floor(rw/2),cy:ry+Math.floor(rh/2)}); 
+    }
   }
 
-  // Connect rooms with corridors
   for (let i = 1; i < rooms.length; i++) {
     carveCorridor(rooms[i-1].cx, rooms[i-1].cy, rooms[i].cx, rooms[i].cy);
   }
 
-  // Place start (room 0 center)
   if (rooms.length > 0) map[rooms[0].cy][rooms[0].cx] = 2;
 
-  // Place enemies in rooms (not first room, not tiny rooms)
+  // Plasarea inamicilor optimizată (fără posibilitate de buclă infinită)
   for (let i = 2; i < rooms.length; i++) {
     const r = rooms[i];
-    const area = (r.x2-r.x1)*(r.y2-r.y1);
-    if (area >= 4) {
-      // place 1-2 enemies in room
+    const roomW = r.x2 - r.x1 - 1;
+    const roomH = r.y2 - r.y1 - 1;
+    
+    if (roomW > 0 && roomH > 0) {
+      const area = (r.x2 - r.x1) * (r.y2 - r.y1);
       const count = 1 + (area > 8 ? 1 : 0);
+      
       for (let k = 0; k < count; k++) {
-        const ec = r.x1 + 1 + Math.floor(Math.random()*(r.x2-r.x1-1));
-        const er = r.y1 + 1 + Math.floor(Math.random()*(r.y2-r.y1-1));
-        // Katana warrior ~30% chance
-        map[er][ec] = Math.random() < 0.3 ? 4 : 3;
+        const ec = r.x1 + 1 + Math.floor(Math.random() * roomW);
+        const er = r.y1 + 1 + Math.floor(Math.random() * roomH);
+        if (er >= 0 && er < height && ec >= 0 && ec < width) {
+          map[er][ec] = Math.random() < 0.3 ? 4 : 3;
+        }
       }
     }
   }
 
-  // Border walls
   for (let r = 0; r < height; r++) { map[r][0] = 1; map[r][width-1] = 1; }
   for (let c = 0; c < width; c++) { map[0][c] = 1; map[height-1][c] = 1; }
 
