@@ -101,11 +101,11 @@
 
     <div class="section" style="border-color: var(--success); background: linear-gradient(145deg, #161b22, #0d1117);">
         <h2 style="color: var(--success); border-left-color: var(--success);">4. Prototip Interactiv 3D (Web Build Sandbox)</h2>
-        <p>Pentru a valida riguros mașina de stări a inteligenței artificiale (Patrol → Chase → Search), algoritmii de orientare vizuală și sistemul de Raycasting înainte de integrarea finală în Unreal Engine 5, am dezvoltat o replică funcțională 3D separată, sub numele de cod <strong>Roninstein</strong>.</p>
-        <p>Acest simulator independent a fost conceput ca o dovadă de concept (Proof of Concept) cu scopul de a izola și testa exclusiv logica comportamentală și mecanicilor de bază, eliminând complet overhead-ul și cerințele masive de resurse specifice unui motor grafic AAA. Prototipul rulează nativ în browser și folosește următoarea stivă de tehnologii web:</p>
+        <p>Pentru a valida riguros mașina de stări a inteligenței artificiale (Patrol → Chase → Search) și algoritmii de orientare vizuală înainte de implementarea lor finală în Unreal Engine 5, am dezvoltat o replică funcțională 3D separată, sub numele de cod <strong>Roninstein</strong>.</p>
+        <p>Acest simulator independent a fost conceput strict ca un mediu de testare rapidă pentru logica comportamentală a inamicilor, eliminând complet overhead-ul și cerințele masive de resurse specifice unui motor grafic AAA. Prototipul rulează nativ în browser și folosește următoarea stivă de tehnologii web:</p>
         <ul>
             <li><strong>Three.js (WebGL):</strong> Utilizat pentru randarea accelerată hardware a mediului tridimensional la prima persoană, asigurând o execuție fluidă și rate de cadre ridicate.</li>
-            <li><strong>Web Audio API:</strong> Implementat pentru un pipeline avansat de sintetizare audio procedurală adaptivă. Ritmul și intensitatea firelor sonore se recalculează dinamic în funcție de vectorul de alertă (<em>aggro count</em>) al inamicilor din proximitate.</li>
+            <li><strong>Web Audio API:</strong> Implementat pentru un pipeline avansat de sintetizare audio procedurală adaptivă. Ritmul și intensitatea firelor sonore se recalculează dinamic în funcție de nivelul de alertă (<em>aggro count</em>) al inamicilor din proximitate.</li>
             <li><strong>Pointer Lock API:</strong> Integrat pentru a asigura un control imersiv și precis al camerei prin intermediul mausului, similar arhitecturii standard a jocurilor de tip First-Person Shooter.</li>
         </ul>
         <div style="text-align: center; margin-top: 30px; margin-bottom: 10px;">
