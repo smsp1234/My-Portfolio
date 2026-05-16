@@ -292,20 +292,20 @@ function makeCanvasTex(w, h, fn) {
 const stoneTex = makeCanvasTex(256, 256, (ctx, w, h) => {
   ctx.fillStyle = '#1a1210'; ctx.fillRect(0,0,w,h);
   for(let y=0;y<h;y+=32){const offset=(Math.floor(y/32)%2)*16;for(let x=-offset;x<w;x+=64){const gray=18+Math.random()*8;ctx.fillStyle=`rgb(${gray},${gray-2},${gray-4})`;ctx.fillRect(x+2,y+2,60,28);ctx.fillStyle='#0a0908';ctx.fillRect(x,y,64,2);ctx.fillRect(x,y,2,32);}}
-  for(let i=0;i<2000;i++){ctx.fillStyle=`rgba(${Math.random()>0.5?255:0},${Math.random()>0.5?255:0},${Math.random()>0.5?255:0},${Math.random()*0.15})`;ctx.fillRect(Math.random()*w,Math.random()*h,2,2);}
+  for(let i=0;i<200;i++){ctx.fillStyle=`rgba(${Math.random()>0.5?255:0},${Math.random()>0.5?255:0},${Math.random()>0.5?255:0},${Math.random()*0.15})`;ctx.fillRect(Math.random()*w,Math.random()*h,2,2);}
 });
 stoneTex.repeat.set(2, 2);
 
 const floorTex = makeCanvasTex(256, 256, (ctx, w, h) => {
   ctx.fillStyle='#100e0c';ctx.fillRect(0,0,w,h);
   for(let y=0;y<h;y+=48){for(let x=0;x<w;x+=48){const gray=14+Math.random()*6;ctx.fillStyle=`rgb(${gray},${gray-1},${gray-3})`;ctx.fillRect(x+1,y+1,46,46);}}
-  for(let i=0;i<1500;i++){ctx.fillStyle=`rgba(255,255,255,${Math.random()*0.04})`;ctx.fillRect(Math.random()*w,Math.random()*h,1,1);}
+  for(let i=0;i<150;i++){ctx.fillStyle=`rgba(255,255,255,${Math.random()*0.04})`;ctx.fillRect(Math.random()*w,Math.random()*h,1,1);}
 });
 floorTex.repeat.set(4, 4);
 
 const ceilTex = makeCanvasTex(256, 256, (ctx, w, h) => {
   ctx.fillStyle='#0d0b09';ctx.fillRect(0,0,w,h);
-  for(let i=0;i<3000;i++){ctx.fillStyle=`rgba(0,0,0,${Math.random()*0.3})`;ctx.fillRect(Math.random()*w,Math.random()*h,Math.random()*4+1,Math.random()*4+1);}
+  for(let i=0;i<300;i++){ctx.fillStyle=`rgba(0,0,0,${Math.random()*0.3})`;ctx.fillRect(Math.random()*w,Math.random()*h,Math.random()*4+1,Math.random()*4+1);}
 });
 ceilTex.repeat.set(4, 4);
 
