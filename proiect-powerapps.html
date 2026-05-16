@@ -1,7 +1,188 @@
-<header>
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofoliu — Soluții Low-Code</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        /* Reset și stiluri de bază */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: block;
+            line-height: 1.6;
+        }
+
+        /* Zona de conținut complet centrată */
+        .main-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 50px 40px;
+        }
+
+        header {
+            margin-bottom: 45px;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 25px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            color: #58a6ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            transition: color 0.2s, transform 0.2s;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            color: #79c0ff;
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #f0f6fc;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #8b949e;
+            font-size: 1.1rem;
+        }
+
+        /* Secțiuni tip Card */
+        .project-section {
+            background-color: #161b22;
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 45px;
+            border: 1px solid #30363d;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #58a6ff;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-left: 4px solid #58a6ff;
+            padding-left: 12px;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            color: #f0f6fc;
+            margin: 25px 0 10px 0;
+            font-weight: 600;
+        }
+
+        p {
+            color: #8b949e;
+            margin-bottom: 18px;
+            font-size: 1rem;
+            text-align: justify;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            color: #8b949e;
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background-color: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ff7b72;
+            font-size: 0.9em;
+        }
+
+        .tech-tags {
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+
+        .tech-tag {
+            display: inline-block;
+            background-color: #388bfd26;
+            color: #58a6ff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #388bfd4d;
+        }
+
+        /* === STRUCTURĂ IMAGINI TIP IERARHIE (MODEL JAVA) === */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .screenshot-container {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .screenshot-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            border: 1px solid #21262d;
+            object-fit: cover;
+        }
+
+        .image-caption {
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-top: 12px;
+            font-family: 'Fira Code', monospace;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .main-content { padding: 30px 20px; }
+            .project-section { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="main-content">
+        <header>
             <a href="index.html" class="back-btn">← Înapoi la dashboard</a>
             <h1>Microsoft PowerApps — Sistem Complet de Gestiune Bibliotecă Virtuală</h1>
-            <div class="subtitle">Arhitectură Canvas App orientată pe fluxul utilizatorului (User Journey) și gestiunea corelată a datelor</div>
+            <div class="subtitle">Arhitectură Canvas App orientată pe fluxul utilizatorului (User Journey) și gestiunea datelor relaționale</div>
         </header>
 
         <section class="project-section">
@@ -71,3 +252,7 @@
                 </div>
             </div>
         </section>
+    </main>
+
+</body>
+</html>
