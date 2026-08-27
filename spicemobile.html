@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpiceMobile – IT Asset & Inventory System</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --btn-bg: #21262d;
+            --text-main: #c9d1d9;
+            --text-bright: #f0f6fc;
+            --accent: #58a6ff;
+            --border: #30363d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            background-color: var(--btn-bg);
+            border: 1px solid var(--border);
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: var(--border);
+            transform: translateX(-4px);
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--text-bright);
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--accent);
+            font-size: 1.1em;
+            font-weight: 500;
+            margin-top: 0;
+        }
+
+        .description {
+            line-height: 1.6;
+            font-size: 1.05em;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 35px;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background-color: var(--btn-bg);
+            border: 1px solid var(--border);
+            color: var(--accent);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .section-title {
+            color: var(--text-bright);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+        }
+
+        /* Grid pentru screenshot-urile de mobil */
+        .mobile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .mobile-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .mobile-card:hover {
+            border-color: var(--accent);
+        }
+
+        .mobile-card img {
+            width: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .mobile-card p {
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+
+        /* Card-uri mari pentru Server și Tabel Excel */
+        .wide-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            transition: border-color 0.3s ease;
+        }
+
+        .wide-card:hover {
+            border-color: var(--accent);
+        }
+
+        .wide-card img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: block;
+        }
+
+        .wide-card p {
+            margin-top: 12px;
+            margin-bottom: 0;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-btn">← Înapoi la Catalog Proiecte</a>
+
+        <div class="header">
+            <h1>📱 SpiceMobile – IT Asset & Inventory System</h1>
+            <p class="subtitle">Sistem integrat Client Mobil + Server Java Desktop pentru gestiunea inventarului IT</p>
+        </div>
+
+        <div class="description">
+            <p><strong>SpiceMobile</strong> este o soluție software creată pentru digitalizarea și automatizarea fluxurilor de inventariere IT. Aplicația mobilă le permite tehnicienilor scanarea rapidă a echipamentelor prin coduri de bare, QR și cipuri NFC/RFID, comunicând direct prin socket-uri TCP/IP pe portul 5000 cu serverul centralizat de gestiune (SpiceMobileServer) și baza de date SQLite.</p>
+            
+            <div class="tech-tags">
+                <span class="tag">Android Studio / Java</span>
+                <span class="tag">Eclipse Workspace (Server)</span>
+                <span class="tag">SQLite Database (`pv.db`)</span>
+                <span class="tag">NFC / RFID Tag Programming</span>
+                <span class="tag">Google Lens / Camera Barcode</span>
+                <span class="tag">Auto Backup Engine</span>
+            </div>
+        </div>
+
+        <!-- SECȚIUNEA 1: BACKEND SERVER -->
+        <h2 class="section-title">🖥️ Server Centralizat & Consolă Live (SpiceMobileServer)</h2>
+        <div class="wide-card">
+            <img src="images/image_d6c059.png" alt="Consola Server SpiceMobile">
+            <p>Consolă administrare server: Configurare căi DB/Backup, sistem de retenție fișiere, driver binar injectat și asistență conexiuni live pe portul 5000.</p>
+        </div>
+
+        <!-- SECȚIUNEA 2: CLIENT MOBIL -->
+        <h2 class="section-title">📲 Interfață Client Mobil (SpiceMobile App)</h2>
+        <div class="mobile-grid">
+            
+            <div class="mobile-card">
+                <img src="images/pagina log in.jpeg" alt="Autentificare">
+                <p>1. Autentificare Tehnician</p>
+            </div>
+
+            <div class="mobile-card">
+                <img src="images/Ecran principal.jpeg" alt="Ecran Principal">
+                <p>2. Meniu Identificare Asset</p>
+            </div>
+
+            <div class="mobile-card">
+                <img src="images/Sertar de optiun.jpeg" alt="Sertar Navigare">
+                <p>3. Navigation Drawer</p>
+            </div>
+
+            <div class="mobile-card">
+                <img src="images/Interogare server pentru CIM.jpeg" alt="Căutare CIM">
+                <p>4. Interogare Server Live</p>
+            </div>
+
+            <div class="mobile-card">
+                <img src="images/Operatiune de scanare cim folosind lens integrat.jpeg" alt="Scanare Barcode">
+                <p>5. Scanare Optică (Camera Lens)</p>
+            </div>
+
+            <div class="mobile-card">
+                <img src="images/Pagina de adaugare a unui nou dispozitiv .jpeg" alt="Adăugare Dispozitiv">
+                <p>6. Înregistrare & Scriere Tag RFID</p>
+            </div>
+
+            <div class="mobile-card">
+                <img src="images/Status proces inventariere.jpeg" alt="Sesiune Inventar">
+                <p>7. Monitorizare Progres Sesiune</p>
+            </div>
+
+            <div class="mobile-card">
+                <img src="images/Proces inventariere.jpeg" alt="Validare CIM">
+                <p>8. Pop-up Validare Stare Asset</p>
+            </div>
+
+            <div class="mobile-card">
+                <img src="images/Ecran Procese verbale.jpeg" alt="Registru Procese Verbale">
+                <p>9. Registru Procese Verbale</p>
+            </div>
+
+        </div>
+
+        <!-- SECȚIUNEA 3: EXPORT & RAPOARTE -->
+        <h2 class="section-title">📊 Generare Rapoarte & Export Inventar</h2>
+        <div class="wide-card">
+            <img src="images/Fisier rezultat dupa inventariere.png" alt="Fișier Rezultat Inventariere Excel">
+            <p>Raport generat automat în urma auditului: marcare status echipamente (SCANAT_FIZIC / NESCANAT), identificare locație, tehnician responsabil și timestamp exact.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>
